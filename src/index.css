@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles can be added below */
+
+
+:root {
+
+/* CSS Variables */
+  --spancolor: #0f7d9f;
+  --btn-bg-color: #0f7d9f;
+  --minColor: white;
+  --text-color: #2f3645;
+  --text-white: white;
+  --primary-colour: #EEEDEB;
+  --secondary-colour: hsl(233 80% 70%);
+  --star-colour: hsl(38 90% 55%);
+
+
+
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
