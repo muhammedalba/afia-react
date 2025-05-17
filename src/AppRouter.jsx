@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import { allRoutes } from "./routes/routes";
-import Header from "./components/Header";
 
 // Import all page components
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -17,9 +16,11 @@ import PatientRegister from "./pages/patient/PatientRegister";
 import PatientDashboard from "./pages/patient/PatientDashboard";
 import PatientExaminations from "./pages/patient/PatientExaminations";
 import PatientProfile from "./pages/patient/PatientProfile";
-import Home from "./pages/public/Home";
+import Home from "./pages/Home";
 import Login from "./pages/public/Login";
 import NotFound from "./pages/public/NotFound";
+import Header from "./components/Header";
+import Footer from "./components/Footer/Footer";
 
 // Component mapping
 const componentMap = {
@@ -58,28 +59,13 @@ const AppRouter = () => {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-100">
         <Header />
-        <main className="py-4">
+        <main className="">
           <Routes>
-            <Route
-              path="/"
-              element={
-                user ? (
-                  <Navigate
-                    to={
-                      user.role === "admin"
-                        ? "/admin/dashboard"
-                        : "/patient/dashboard"
-                    }
-                  />
-                ) : (
-                  <Home />
-                )
-              }
-            />
-
+            <Route path="/" element={<Home />} />
             {allRoutes.map(renderRoute)}
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );

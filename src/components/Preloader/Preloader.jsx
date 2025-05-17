@@ -2,7 +2,7 @@ import React from "react";
 import "./preloader.css";
 const Preloader = () => {
   return (
-    <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-white">
+    <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#a8a2a2ba]">
       <div className=" w-64 h-16 relative">
         <svg
           viewBox="0 0 240 100"

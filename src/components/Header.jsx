@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import logo from "../assets/AfiaLogo.png";
+import { Icon } from "@iconify/react";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
+  const [mobileToggle, setMobileToggle] = useState(false);
   const handleLogout = async () => {
     try {
       await logout();
@@ -15,33 +26,22 @@ const Header = () => {
     }
   };
 
-  const adminLinks = [
-    { to: "/admin/dashboard", label: "Dashboard" },
-    { to: "/admin/patients", label: "Patients" },
-    { to: "/admin/doctors", label: "Doctors" },
-    { to: "/admin/examinations", label: "Examinations" },
-    { to: "/admin/donations", label: "Donations" },
-    { to: "/admin/statistics", label: "Statistics" },
-  ];
+  const adminLinks = [{ to: "/admin/dashboard", label: "لوحة التحكم" }];
 
-  const patientLinks = [
-    { to: "/patient/dashboard", label: "Dashboard" },
-    { to: "/patient/examinations", label: "My Examinations" },
-    { to: "/patient/profile", label: "Profile" },
-  ];
+  const patientLinks = [{ to: "/patient/dashboard", label: "لوحة التحكم" }];
 
   const renderNavLinks = () => {
-    if (!user) return null;
+    if (user) return null;
 
-    const links = user.role === "admin" ? adminLinks : patientLinks;
+    const links = "adminl" === "admin" ? adminLinks : patientLinks;
 
     return (
-      <div className="hidden md:flex items-center space-x-4">
+      <div className="flex items-center space-x-3 rtl:space-x-reverse">
         {links.map((link) => (
           <Link
             key={link.to}
             to={link.to}
-            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+            className="text-textColor hover:text-primary px-3 py-2 rounded-md "
           >
             {link.label}
           </Link>
@@ -51,73 +51,173 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Link to="/" className="text-white font-bold text-xl">
-                Afia
-              </Link>
+    <>
+      <nav className="sticky  w-full top-0 z-50  ">
+        {/* top bar */}
+        <div className=" bg-gray-100 py-2 hidden md:block  ">
+          <div className="p-2 ">
+            <div className=" w-full flex  items-center justify-between">
+              <div className="">
+                <ul className="w-full flex  items-center justify-between">
+                  <li className="px-2 flex  items-center justify-between">
+                    <Link to={"/about"}>من نحن </Link>
+                  </li>
+                  <li className="px-2 flex  items-center justify-between">
+                    <Link to={"/about"}> سسياسة الخصوصيه </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <ul className="w-full flex  items-center justify-between">
+                  <li className="px-2   ">
+                    <a
+                      href="http//"
+                      className="items-center flex justify-between "
+                    >
+                      +963 998 942 124
+                      <Icon
+                        icon={"carbon:phone-filled"}
+                        width={"20"}
+                        color="fc4c55"
+                      />
+                    </a>
+                  </li>
+                  <li className="px-2">
+                    <a
+                      href="mailto:medlife056@gmail.com"
+                      className="text-decoration-none flex  items-center justify-between"
+                    >
+                      medlife056@gmail.com
+                      <Icon
+                        className="mx-1"
+                        icon={"line-md:email"}
+                        width={"20"}
+                        color="fc4c55"
+                      />
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            {renderNavLinks()}
-          </div>
-
-          <div className="flex items-center">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-300">
-                  Welcome, {user.full_name || user.email}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  to="/admin/login"
-                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Admin Login
-                </Link>
-                <Link
-                  to="/patient/login"
-                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Patient Login
-                </Link>
-                <Link
-                  to="/patient/register"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
           </div>
         </div>
-      </div>
+        {/* nav bar */}
+        <div className="bg-minColor text-textColor border  mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container ">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center">
+                {user ? (
+                  <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Icon
+                          color="fc4c55"
+                          icon="si:user-fill"
+                          width="24"
+                          height="24"
+                        />
+                        {/* <Icon
+                        icon="heroicons:bars-3-center-left"
+                        width="24"
+                        height="24"
+                      /> */}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <div className="p-1 flex items-center gap-2 ">
+                            {renderNavLinks()}
+                            <Icon
+                              color="fc4c55"
+                              icon={
+                                "material-symbols-light:settings-heart-outline-rounded"
+                              }
+                              width={"30"}
+                              height={"30"}
+                            />
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <button
+                            onClick={handleLogout}
+                            className="p-1 flex items-center gap-2 w-full justify-between"
+                          >
+                            تسجيل خروج
+                            <Icon
+                              color="fc4c55"
+                              icon="solar:logout-broken"
+                              width={"30"}
+                            />
+                          </button>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-      {/* Mobile menu */}
-      <div className="md:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {user &&
-            (user.role === "admin" ? adminLinks : patientLinks).map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
+                    <span className="text-textColor">
+                      مرحباً،
+                      {/* {user.full_name || user.email} */}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Icon
+                          color="fc4c55"
+                          icon="si:user-fill"
+                          width="24"
+                          height="24"
+                        />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        {/* <DropdownMenuLabel> تسجيل </DropdownMenuLabel> */}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <Link
+                            to="/patient/login"
+                            className="text-textColor hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+                          >
+                            تسجيل دخول المريض
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link
+                            to="/admin/login"
+                            className="text-textColor hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+                          >
+                            تسجيل دخول المسؤول
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Link to="/" className="flex items-center">
+                      <Icon
+                        color="fc4c55"
+                        icon="line-md:home-twotone"
+                        width="24"
+                        height="24"
+                        path="/"
+                      />
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Link to="/" className="flex items-center">
+                    <img
+                      src={logo}
+                      alt="Afia Logo"
+                      className="h-[4rem] md:h-[5rem] w-auto mr-2"
+                    />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
 
