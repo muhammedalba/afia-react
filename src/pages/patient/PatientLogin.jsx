@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Icon } from "@iconify/react";
@@ -27,12 +27,13 @@ const schema = yup.object().shape({
 });
 
 const PatientLogin = () => {
-  const [authApi, { data, error: FiledError, isLoading }] =
+  const [authApi, { data, error: FiledError, isLoading, isSuccess }] =
     useAuthApiMutation();
-
+  const [errorLoading, setErrorLoading] = useState(null);
   // const decodedName = decodeURIComponent(rawName);name20%last => name last name
   const navigate = useNavigate();
   const cookies = new Cookies();
+  console.log(data?.Message);
 
   const { login } = useAuth();
   // 2. handel useForm مع yupResolver
@@ -46,20 +47,23 @@ const PatientLogin = () => {
 
   // 3.handel res
   useEffect(() => {
-    if (data) {
+    if (isSuccess && data?.Status != 200) {
+      setErrorLoading(data?.Message);
+    }
+  }, [data,isSuccess]);
+
+  useEffect(() => {
+    if (data?.status === 200) {
       cookies.set("token", data?.Token);
       cookies.set("full_name", data?.Data?.full_name);
       cookies.set("role", "patient");
       successNotify("تم تسجيل الدخول بنجاح");
       // send user data to context
-      // login({ ...data?.Data, role: "patient" });
-      
+      login({ ...data?.Data, role: "patient" });
+
       navigate("/patient/dashboard");
     }
-    if (FiledError) {
-      errorNotify("حدث خطا غير متوقع");
-    }
-  }, [data, File]);
+  }, [data?.status]);
 
   // 4. send date to server
   const onSubmit = async (formData) => {
@@ -69,6 +73,7 @@ const PatientLogin = () => {
         body: formData,
         method: "POST",
       });
+      setErrorLoading(data?.Message);
     } catch (err) {
       console.log(err);
     }
@@ -94,14 +99,12 @@ const PatientLogin = () => {
             </h2>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            {FiledError && (
+            {errorLoading && (
               <div
                 className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
                 role="alert"
               >
-                <span className="block sm:inline">
-                  {FiledError?.data?.message}
-                </span>
+                <span className="block sm:inline">{errorLoading}</span>
               </div>
             )}
 

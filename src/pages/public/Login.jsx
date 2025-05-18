@@ -22,7 +22,7 @@ const Login = () => {
                 to="/admin/login"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-bgColor hover:bg-[#c1545a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bgColor"
               >
-                تسجيل الدخول كطبيب
+                تسجيل الدخول مسؤول
               </Link>
             </div>
 
