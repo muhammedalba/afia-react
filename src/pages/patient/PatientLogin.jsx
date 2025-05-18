@@ -50,7 +50,7 @@ const PatientLogin = () => {
     if (isSuccess && data?.Status != 200) {
       setErrorLoading(data?.Message);
     }
-  }, [data,isSuccess]);
+  }, [data, isSuccess]);
 
   useEffect(() => {
     if (data?.status === 200) {
@@ -123,8 +123,8 @@ const PatientLogin = () => {
                   type="tel"
                   autoComplete="phone"
                   disabled={isLoading}
-                  placeholder="البريد الإلكتروني"
-                  className={`pl-10 pr-3 py-2 w-full border rounded-md placeholder-gray-500 focus:outline-none focus:ring-1  sm:text-sm focus:${
+                  placeholder=" رقم الهاتف"
+                  className={`pl-10 pr-3 py-2 w-full border rounded-md text-end placeholder-gray-500 focus:outline-none focus:ring-1  sm:text-sm focus:${
                     errors?.phone ? "ring-bgColor" : "ring-green-300"
                   }`}
                 />
