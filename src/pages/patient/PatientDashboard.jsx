@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { useGetAllResourcesQuery } from "../../redux/features/api/apiSlice";
 
 const StatCard = ({ title, value, icon, color }) => (
   <div className="bg-white rounded-lg shadow p-6">
@@ -15,64 +16,34 @@ const StatCard = ({ title, value, icon, color }) => (
 );
 
 const PatientDashboard = () => {
+  const {
+    data,
+    error: eror,
+    isLoading,
+    isSuccess,
+  } = useGetAllResourcesQuery("/My_examinations");
+  const {
+    data: AcceptedData,
+    error: AcceptedError,
+    isLoading: AcceptedLoading,
+    isSuccess: AcceptedSuccess,
+  } = useGetAllResourcesQuery("/Accepted_examinations");
+  console.log("data", data);
+
   const [stats, setStats] = useState({
-    totalExaminations: 0,
-    pendingExaminations: 0,
-    acceptedExaminations: 0,
-    totalDonations: 0,
+    totalExaminations: 20,
+    pendingExaminations: 40,
+    acceptedExaminations: 20,
+    totalDonations: 50,
   });
-  const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState(null);
   const { user } = useAuth();
 
-  useEffect(() => {
-    fetchPatientStats();
-  }, []);
+  useEffect(() => {}, []);
 
-  const fetchPatientStats = async () => {
-    try {
-      const [allExaminationsRes, acceptedExaminationsRes] = await Promise.all([
-        fetch("http://127.0.0.1:8000/api/My_examinations", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }),
-        fetch("http://127.0.0.1:8000/api/Accepted_examinations", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }),
-      ]);
-
-      if (!allExaminationsRes.ok || !acceptedExaminationsRes.ok) {
-        throw new Error("Failed to fetch patient statistics");
-      }
-
-      const [allExaminations, acceptedExaminations] = await Promise.all([
-        allExaminationsRes.json(),
-        acceptedExaminationsRes.json(),
-      ]);
-
-      const pendingExaminations = allExaminations.filter(
-        (exam) => exam.status === "pending"
-      );
-
-      setStats({
-        totalExaminations: allExaminations.length,
-        pendingExaminations: pendingExaminations.length,
-        acceptedExaminations: acceptedExaminations.length,
-        totalDonations: 0, // This will be updated when the donations API is available
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <div className="text-center p-4">Loading...</div>;
+  if (isLoading || AcceptedLoading)
+    return <div className="text-center p-4">Loading...</div>;
   if (error) return <div className="text-red-500 p-4">{error}</div>;
 
   return (

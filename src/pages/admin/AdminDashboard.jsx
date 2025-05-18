@@ -1,44 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getStatistics } from "../../services/adminService";
-import { useGetDataQuery } from "../../redux/features/api/apiSlice";
+import { useGetAllResourcesQuery } from "../../redux/features/api/apiSlice";
 
 const AdminDashboard = () => {
   // get brands from the database
-  const { data, error, isLoading, isSuccess } = useGetDataQuery(
-    "/Display_doctors"
-  );
+  const { data, error, isLoading, isSuccess } =
+    useGetAllResourcesQuery("/Display_doctors");
+
+  const {
+    data: patientsData,
+    error: patientsError,
+    isLoadingL: patientsLoading,
+    isSuccess: patientsSuccess,
+  } = useGetAllResourcesQuery("/Display_patients");
+  const {
+    data: examinationsData,
+    error: examinationsError,
+    isLoadingL: examinationsLoading,
+    isSuccess: examinationsSuccess,
+  } = useGetAllResourcesQuery("/Display_examinations");
   // const {
   //   data: docktorsNum,
   //   error: docktorsNumError,
   //   isLoadingL: docktorsNumLoading,
   //   isSuccess:docktorsNumSuccess,
-  // } = useGetDataQuery(" /numbers_of_doctors");
+  // } = useGetAllResourcesQuery("/numbers_of_doctors");
 
   // console.log("docktorsNum", docktorsNum);
-  console.log("data", data);
+  console.log("data", patientsData);
+  console.log("data", patientsData?.Data?.total);
   console.log("error", error);
 
   // /numbers_of_doctors
   const [statistics, setStatistics] = useState({
     doctors: 0,
-    patients: 0,
-    examinations: 0,
-    donations: 0,
+    patients: 10,
+    examinations: 20,
+    donations: 50,
   });
 
-  useEffect(() => {
-    const fetchStatistics = async () => {
-      try {
-        // const response = await getStatistics();
-        setStatistics(docktorsNum.data);
-      } catch (error) {
-        console.error("Error fetching statistics:", error);
-      }
-    };
-
-    fetchStatistics();
-  }, []);
 
   const StatCard = ({ title, value, link, color }) => (
     <Link to={link} className="block">
@@ -60,19 +61,19 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Doctors"
-          value={statistics.doctors}
+          value={data?.Data?.total}
           link="/admin/doctors"
           color="hover:bg-blue-50"
         />
         <StatCard
           title="Total Patients"
-          value={statistics.patients}
+          value={patientsData?.Data?.total}
           link="/admin/patients"
           color="hover:bg-green-50"
         />
         <StatCard
           title="Total Examinations"
-          value={statistics.examinations}
+          value={examinationsData?.Data?.total}
           link="/admin/examinations"
           color="hover:bg-yellow-50"
         />

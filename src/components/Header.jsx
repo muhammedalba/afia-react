@@ -5,16 +5,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/shared/ui/dropdown-menu";
 
 import logo from "../assets/AfiaLogo.png";
 import { Icon } from "@iconify/react";
 
 const Header = () => {
   const { user, logout } = useAuth();
+  console.log(user, "user");
+
   const navigate = useNavigate();
   const [mobileToggle, setMobileToggle] = useState(false);
   const handleLogout = async () => {
@@ -31,9 +32,9 @@ const Header = () => {
   const patientLinks = [{ to: "/patient/dashboard", label: "لوحة التحكم" }];
 
   const renderNavLinks = () => {
-    if (user) return null;
+    if (!user) return null;
 
-    const links = "adminl" === "admin" ? adminLinks : patientLinks;
+    const links = user?.role === "admin" ? adminLinks : patientLinks;
 
     return (
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -60,10 +61,10 @@ const Header = () => {
               <div className="">
                 <ul className="w-full flex  items-center justify-between">
                   <li className="px-2 flex  items-center justify-between">
-                    <Link to={"/about"}>من نحن </Link>
+                    <Link to="/About">من نحن </Link>
                   </li>
                   <li className="px-2 flex  items-center justify-between">
-                    <Link to={"/about"}> سسياسة الخصوصيه </Link>
+                    <Link to={"/About"}> سسياسة الخصوصيه </Link>
                   </li>
                 </ul>
               </div>
@@ -154,8 +155,7 @@ const Header = () => {
                     </DropdownMenu>
 
                     <span className="text-textColor">
-                      مرحباً،
-                      {/* {user.full_name || user.email} */}
+                      مرحباً، <span>{user?.full_name || user?.email}</span>
                     </span>
                   </div>
                 ) : (

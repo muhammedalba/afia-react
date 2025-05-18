@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useState } from "react";
+import Cookies from "universal-cookie";
+
+
+
+
 
 const AuthContext = createContext(null);
+const cookies = new Cookies();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -10,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    cookies.remove("token");
+    cookies.remove("full_name");
+    cookies.remove("role");
     setUser(null);
   };
 

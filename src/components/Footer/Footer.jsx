@@ -76,6 +76,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">تواصل معنا</h3>
             <ul className="space-y-2">
               <li>البريد الإلكتروني: medlife056@gmail.com</li>
+              <li>الموقع الإلكتروني:<br/>
+                <a href="https://medlife.hurufy.com">
+              medlife.hurufy.com 
+              </a></li>
+
               <li>الهاتف: +963 998 942 124</li>
               <li>العنوان: 123 شارع المركز الطبي</li>
             </ul>

@@ -83,6 +83,11 @@ export const publicRoutes = [
     isPublic: true,
   },
   {
+    path: "/About",
+    element: "About",
+    isPublic: true,
+  },
+  {
     path: "/login",
     element: "Login",
     isPublic: true,

@@ -18,6 +18,7 @@ import PatientExaminations from "./pages/patient/PatientExaminations";
 import PatientProfile from "./pages/patient/PatientProfile";
 import Home from "./pages/Home";
 import Login from "./pages/public/Login";
+import About from "./pages/public/About";
 import NotFound from "./pages/public/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer/Footer";
@@ -39,6 +40,7 @@ const componentMap = {
   Home,
   Login,
   NotFound,
+  About,
 };
 
 const AppRouter = () => {
@@ -56,7 +58,10 @@ const AppRouter = () => {
   };
 
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{
+  v7_startTransition: true,
+  v7_relativeSplatPath: true
+}}>
       <div className="min-h-screen bg-gray-100">
         <Header />
         <main className="">

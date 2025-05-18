@@ -29,7 +29,7 @@ const Preloader = () => {
             style={{
               strokeDasharray: "500",
               strokeDashoffset: "500",
-              animation: "draw 3s linear infinite",
+              animation: "draw 0.7s linear infinite",
               zIndex: "20",
             }}
           />

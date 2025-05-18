@@ -1,6 +1,4 @@
-
-
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = import.meta.env.VITE_API;
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
   return {
@@ -20,6 +18,9 @@ const adminLogin = async (credentials) => {
     },
     body: JSON.stringify(credentials),
   });
+  if (!response.ok) {
+    throw new Error("فشل تسجيل الدخول");
+  }
   return response.json();
 };
 
