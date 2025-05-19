@@ -1,175 +1,213 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-
+import {
+  useGetAllResourcesQuery,
+  useDeleteResourceMutation,
+  useCreateResourceMutation,
+} from "../../redux/features/api/apiSlice";
+import Preloader from "../../components/Preloader/Preloader";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Search } from "lucide-react";
+import { pageTitle } from "../../helper";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
+import CustomPagination from "../../components/Pagination/CustomPagination";
+import { useDebounce } from "use-debounce";
 const AdminPatients = () => {
-  const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { user } = useAuth();
-
   useEffect(() => {
-    fetchPatients();
+    window.scrollTo(0, 0);
+    pageTitle("لوحة التحكم");
   }, []);
+  const [debouncedSearchTerm] = useDebounce("s", 500);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchPatients = async () => {
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/Display_patients",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+  const {
+    data: response,
+    isLoading,
+    error,
+  } = useGetAllResourcesQuery(
+    searchTerm
+      ? `/Search_for_patient/${searchTerm}`
+      : `/Display_patients?page=${currentPage}`
+  );
+  console.log(searchTerm);
+  console.log(response, "response");
 
-      if (!response.ok) throw new Error("Failed to fetch patients");
-
-      const data = await response.json();
-      setPatients(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [
+    deletePatient,
+    { data: dataDelete, error: errorDelete, isLoading: LoadingDelete },
+  ] = useDeleteResourceMutation();
+  const [
+    approvePatient,
+    { data: dataApprove, error: errorApprove, isLoading: LoadingApprove },
+  ] = useCreateResourceMutation();
 
   const handleApprovePatient = async (patientId) => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/Patient_approve",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ patient_id: patientId }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to approve patient");
-
-      // Refresh patient list
-      fetchPatients();
+      await approvePatient({
+        url: "/Patient_approve",
+        method: "POST",
+        body: { patient_id: patientId },
+      });
     } catch (err) {
-      setError(err.message);
+      console.error("Failed to approve patient:", err);
     }
   };
 
   const handleDeletePatient = async (patientId) => {
-    if (!window.confirm("Are you sure you want to delete this patient?"))
-      return;
-
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/Delete_patient/${patientId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+      console.log(patientId, "id");
 
-      if (!response.ok) throw new Error("Failed to delete patient");
-
-      // Refresh patient list
-      fetchPatients();
+      await deletePatient(`/Delete_patient/${patientId}`);
     } catch (err) {
-      setError(err.message);
+      console.error("Failed to delete patient:", err);
     }
   };
 
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone?.includes(searchTerm) ||
-      patient.national_number?.includes(searchTerm)
-  );
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1); // Reset to first page when searching
+  };
 
-  if (loading) return <div className="text-center p-4">Loading...</div>;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const patients = response?.Data?.data || [];
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-4">Patient Management</h1>
-        <input
-          type="text"
-          placeholder="Search patients..."
-          className="w-full p-2 border rounded"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <h1 className="text-2xl font-bold mb-4 text-right">إدارة المرضى</h1>
+        <form onSubmit={handleSearch} className="flex gap-2">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="ابحث عن مريض بالاسم أو رقم الهاتف أو الرقم القومي..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 ring-1 bg-white focus-visible:ring-bgColor
+ text-right"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
+          <Button className=" bg-bgColor hover:bg-red-700" type="submit">
+            بحث
+          </Button>
+        </form>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Phone
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                National ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredPatients.map((patient) => (
-              <tr key={patient.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {patient.full_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{patient.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {patient.national_number}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      patient.is_approved
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {patient.is_approved ? "Approved" : "Pending"}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  {!patient.is_approved && (
-                    <button
-                      onClick={() => handleApprovePatient(patient.id)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4"
-                    >
-                      Approve
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDeletePatient(patient.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-[400px]">
+          <Preloader />
+        </div>
+      ) : error ? (
+        <div className="text-red-500 p-4 text-center">{error.message}</div>
+      ) : patients.length === 0 ? (
+        <div className="text-center p-8 text-gray-600 text-lg">
+          لا يوجد مريض بهذا الاسم
+        </div>
+      ) : (
+        <>
+          <div className="bg-white rounded-lg shadow overflow-hidden w-full">
+            <div className="overflow-x-auto w-full">
+              <table className="min-w-max divide-y divide-gray-200 w-full">
+                <thead className="bg-gray-200 text-textColor text-right text-xs font-medium   tracking-wider uppercase">
+                  <tr>
+                    <th className="px-6 py-3 ">الاسم</th>
+                    <th className="px-6 py-3 ">رقم الهاتف</th>
+                    <th className="px-6 py-3 ">الرقم الوطني</th>
+                    <th className="px-6 py-3 ">الحالة الاجتماعية</th>
+                    <th className="px-6 py-3 ">الحالة</th>
+                    <th className="px-6 py-3 ">حذف</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {patients.map((patient) => (
+                    <tr key={patient.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {patient.full_name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {patient.phone}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {patient.national_number}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {patient.martial_status}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            patient.is_approved
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                          }`}
+                        >
+                          {patient.is_approved ? "تم الموافقة" : "قيد الانتظار"}
+                        </span>
+                        <span className="block mt-2">
+                          {!patient.is_approved && (
+                            <ConfirmDialog
+                              trigger={
+                                <Button
+                                  disabled={
+                                    isLoading || LoadingDelete || LoadingApprove
+                                  }
+                                  variant="ghost"
+                                  className="text-indigo-600 hover:text-indigo-900 ml-4"
+                                >
+                                  موافقة
+                                </Button>
+                              }
+                              className="bg-green-600 hover:bg-green-800"
+                              title="تأكيد الموافقة"
+                              description="هل أنت متأكد من الموافقة على هذا المريض؟"
+                              onConfirm={() => handleApprovePatient(patient.id)}
+                            />
+                          )}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
+                        <ConfirmDialog
+                          trigger={
+                            <Button
+                              disabled={
+                                isLoading || LoadingDelete || LoadingApprove
+                              }
+                              variant="ghost"
+                              className="bg-bgColor  hover:bg-red-700 text-white   hover:text-white"
+                            >
+                              حذف
+                            </Button>
+                          }
+                          title="تأكيد الحذف"
+                          className="bg-red-600 text-white hover:bg-red-700"
+                          description="هل أنت متأكد من حذف هذا المريض؟ لا يمكن التراجع عن هذا الإجراء."
+                          onConfirm={() => handleDeletePatient(patient.id)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pagination */}
+          {!searchTerm && response?.Data && (
+            <div className="mt-4">
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={response.Data.last_page}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

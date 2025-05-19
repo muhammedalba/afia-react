@@ -15,7 +15,7 @@ const AdminExaminations = () => {
   const fetchExaminations = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/Display_examinations",
+        "https://lavenderblush-owl-178559.hostingersite.com/api/Display_examinations",
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -41,7 +41,7 @@ const AdminExaminations = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/delete_examination/${examinationId}`,
+        `https://lavenderblush-owl-178559.hostingersite.com/api/delete_examination/${examinationId}`,
         {
           method: "DELETE",
           headers: {

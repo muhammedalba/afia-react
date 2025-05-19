@@ -32,7 +32,7 @@ const PatientRegister = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/patient_register",
+        "https://lavenderblush-owl-178559.hostingersite.com/api/patient_register",
         {
           method: "POST",
           headers: {

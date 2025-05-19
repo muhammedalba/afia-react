@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { pageTitle } from "../../helper";
 
 const developers = [
   {
@@ -26,6 +27,10 @@ const fadeUp = {
 };
 
 const About = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    pageTitle(" من نحن");
+  }, []);
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}

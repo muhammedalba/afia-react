@@ -11,6 +11,7 @@ import Preloader from "../../components/Preloader/Preloader";
 import { useAuth } from "../../contexts/AuthContext";
 import { errorNotify, successNotify } from "../../utils/Toast";
 import { ToastContainer } from "react-toastify";
+import { pageTitle } from "../../helper";
 
 // 1.  schema validation
 const schema = yup.object().shape({
@@ -40,7 +41,10 @@ const AdminLogin = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    pageTitle(" تسجيل دخول المسؤول");
+  }, []);
   useEffect(() => {
     if (data) {
       cookies.set("token", data.token);

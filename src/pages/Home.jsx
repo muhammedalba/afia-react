@@ -217,7 +217,7 @@ export default function Home() {
             </div>
             <div className="text-right">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                عن مركز العافية
+                عن مركز عافية
               </h2>
               <p className="text-lg text-gray-600 mb-6">
                 نحن نقدم خدمات طبية متكاملة بأحدث التقنيات وأعلى معايير الجودة.

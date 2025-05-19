@@ -15,7 +15,7 @@ const AdminDonations = () => {
   const fetchDonations = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/Display_all_donations",
+        "https://lavenderblush-owl-178559.hostingersite.com/api/Display_all_donations",
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -38,7 +38,7 @@ const AdminDonations = () => {
   const handleApproveDonation = async (donationId) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/Approve_donation/${donationId}`,
+        `https://lavenderblush-owl-178559.hostingersite.com/api/Approve_donation/${donationId}`,
         {
           method: "PATCH",
           headers: {
@@ -60,7 +60,7 @@ const AdminDonations = () => {
   const handleCancelDonation = async (donationId) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/Cancel_doantion/${donationId}`,
+        `https://lavenderblush-owl-178559.hostingersite.com/api/Cancel_doantion/${donationId}`,
         {
           method: "PATCH",
           headers: {

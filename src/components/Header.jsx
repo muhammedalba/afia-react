@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/shared/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 import logo from "../assets/AfiaLogo.png";
 import { Icon } from "@iconify/react";
@@ -61,10 +61,17 @@ const Header = () => {
               <div className="">
                 <ul className="w-full flex  items-center justify-between">
                   <li className="px-2 flex  items-center justify-between">
-                    <Link to="/About">من نحن </Link>
+                    <a target="_blank" href="https://medlife.hurufy.com/">
+                      <Icon
+                        icon="icon-park-outline:earth"
+                        width="24"
+                        height="24"
+                        color="fc4c55"
+                      />
+                    </a>
                   </li>
                   <li className="px-2 flex  items-center justify-between">
-                    <Link to={"/About"}> سسياسة الخصوصيه </Link>
+                    <Link to="/About">من نحن </Link>
                   </li>
                 </ul>
               </div>
@@ -118,7 +125,7 @@ const Header = () => {
                           height="24"
                         />
                         {/* <Icon
-                        icon="heroicons:bars-3-center-left"
+                        icon="icon-park-outline:earth"
                         width="24"
                         height="24"
                       /> */}

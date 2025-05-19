@@ -11,6 +11,7 @@ import Preloader from "../../components/Preloader/Preloader";
 import { useAuth } from "../../contexts/AuthContext";
 import { errorNotify, successNotify } from "../../utils/Toast";
 import { ToastContainer } from "react-toastify";
+import { pageTitle } from "../../helper";
 
 // 1. schema yup
 const schema = yup.object().shape({
@@ -44,7 +45,10 @@ const PatientLogin = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    pageTitle(" تسجيل دخول المسؤول");
+  }, []);
   // 3.handel res
   useEffect(() => {
     if (isSuccess && data?.Status != 200) {

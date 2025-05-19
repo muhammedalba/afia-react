@@ -45,7 +45,7 @@ const PatientProfile = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/update_patient_profile",
+        "https://lavenderblush-owl-178559.hostingersite.com/api/update_patient_profile",
         {
           method: "PATCH",
           headers: {

@@ -32,25 +32,25 @@ const AdminStatistics = () => {
     try {
       const [doctorsRes, patientsRes, examinationsRes, donationsRes] =
         await Promise.all([
-          fetch("http://127.0.0.1:8000/api/numbers_of_doctors", {
+          fetch("https://lavenderblush-owl-178559.hostingersite.com/api/numbers_of_doctors", {
             headers: {
               Authorization: `Bearer ${user.token}`,
               Accept: "application/json",
             },
           }),
-          fetch("http://127.0.0.1:8000/api/numbers_of_patients", {
+          fetch("https://lavenderblush-owl-178559.hostingersite.com/api/numbers_of_patients", {
             headers: {
               Authorization: `Bearer ${user.token}`,
               Accept: "application/json",
             },
           }),
-          fetch("http://127.0.0.1:8000/api/numbers_of_examinations", {
+          fetch("https://lavenderblush-owl-178559.hostingersite.com/api/numbers_of_examinations", {
             headers: {
               Authorization: `Bearer ${user.token}`,
               Accept: "application/json",
             },
           }),
-          fetch("http://127.0.0.1:8000/api/numbers_of_blood_donations", {
+          fetch("https://lavenderblush-owl-178559.hostingersite.com/api/numbers_of_blood_donations", {
             headers: {
               Authorization: `Bearer ${user.token}`,
               Accept: "application/json",

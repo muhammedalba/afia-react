@@ -15,7 +15,7 @@ const AdminDoctors = () => {
   const fetchDoctors = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/Display_doctors",
+        "https://lavenderblush-owl-178559.hostingersite.com/api/Display_doctors",
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -37,15 +37,18 @@ const AdminDoctors = () => {
 
   const handleApproveDoctor = async (doctorId) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/Doctor_approve", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ doctor_id: doctorId }),
-      });
+      const response = await fetch(
+        "hhttps://lavenderblush-owl-178559.hostingersite.com/api/Doctor_approve",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ doctor_id: doctorId }),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to approve doctor");
 
@@ -61,7 +64,7 @@ const AdminDoctors = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/Delete_doctor/${doctorId}`,
+        `https://lavenderblush-owl-178559.hostingersite.com/api/Delete_doctor/${doctorId}`,
         {
           method: "DELETE",
           headers: {

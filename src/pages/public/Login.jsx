@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from"../../assets/AfiaLogo.png"
+import { pageTitle } from "../../helper";
 const Login = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    pageTitle('تسجيل الدخول')
+  }, []);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <img src={logo} alt="logo" loading="lazy" width={150} className="m-auto black " />

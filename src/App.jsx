@@ -6,6 +6,9 @@ import store from "./redux/app/store";
 
 
 function App() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Provider store={store}>
 
