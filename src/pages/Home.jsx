@@ -43,7 +43,7 @@ export default function Home() {
   const heroSlides = [
     {
       image: client1,
-      title: "مركز العافية الطبي",
+      title: "مركز عافية الطبي",
       description:
         "نقدم أفضل الخدمات الطبية بأحدث التقنيات وأعلى معايير الجودة",
     },
@@ -107,7 +107,7 @@ export default function Home() {
           {heroSlides.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full transition-colors ${
+              className={`w-3 h-3 rounded-full mx-2 transition-colors ${
                 index === currentHero ? "bg-bgColor" : "bg-white/50"
               }`}
               onClick={() => setCurrentHero(index)}

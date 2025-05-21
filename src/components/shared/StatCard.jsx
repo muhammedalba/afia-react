@@ -9,7 +9,7 @@ const StatCard = ({ title, value, link, color, icon }) => {
             {title}
           <Icon icon={icon} width="50" height="50" color="fc4c55" />
           </dt>
-          <dd className="mt-1 text-3xl font-semibold text-gray-900">{value}</dd>
+          <dd className="mt-1 text-bgColor  text-3xl font-semibold text-center">{value}</dd>
         </div>
       </div>
     </Link>

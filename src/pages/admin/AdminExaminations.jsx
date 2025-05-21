@@ -1,162 +1,116 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import React, { useEffect, useState } from "react";
+import {
+  useGetAllResourcesQuery,
+  useDeleteResourceMutation,
+} from "../../redux/features/api/apiSlice";
+import Preloader from "../../components/Preloader/Preloader";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Search } from "lucide-react";
+import { pageTitle } from "../../helper";
+import CustomPagination from "../../components/Pagination/CustomPagination";
+import { useDebounce } from "use-debounce";
+import { Icon } from "@iconify/react";
+// import ExaminationTable from "./ExaminationTable";
+import AdminExaminationsTable from "../../components/Table/Table";
 
 const AdminExaminations = () => {
-  const [examinations, setExaminations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { user } = useAuth();
-
   useEffect(() => {
-    fetchExaminations();
+    window.scrollTo(0, 0);
+    pageTitle("لوحة التحكم");
   }, []);
 
-  const fetchExaminations = async () => {
-    try {
-      const response = await fetch(
-        "https://lavenderblush-owl-178559.hostingersite.com/api/Display_examinations",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+  const [currentPage, setCurrentPage] = useState(1);
 
-      if (!response.ok) throw new Error("Failed to fetch examinations");
-
-      const data = await response.json();
-      setExaminations(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteExamination = async (examinationId) => {
-    if (!window.confirm("Are you sure you want to delete this examination?"))
-      return;
-
-    try {
-      const response = await fetch(
-        `https://lavenderblush-owl-178559.hostingersite.com/api/delete_examination/${examinationId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to delete examination");
-
-      // Refresh examination list
-      fetchExaminations();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const filteredExaminations = examinations.filter(
-    (examination) =>
-      examination.patient?.full_name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      examination.doctor?.full_name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      examination.description_of_status
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      examination.city?.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data, isLoading, error } = useGetAllResourcesQuery(
+    `/Display_examinations?page=${currentPage}&search=${debouncedSearchTerm}`
   );
 
-  if (loading) return <div className="text-center p-4">Loading...</div>;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
+  const [
+    deletePatient,
+    { isLoading: LoadingDelete },
+  ] = useDeleteResourceMutation();
+
+  const handleDeleteExamination = async (examinationId) => {
+    try {
+      await deletePatient(examinationId).unwrap();
+    } catch (err) {
+      console.error("Failed to delete examination:", err);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-4">Examination Management</h1>
-        <input
-          type="text"
-          placeholder="Search examinations..."
-          className="w-full p-2 border rounded"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <h1 className="text-2xl font-bold mb-4 text-right">إدارة الفحوصات</h1>
+        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="ابحث عن فحص بالاسم أو المدينة..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 ring-1 bg-white focus-visible:ring-bgColor text-right"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
+          {isLoading ? (
+            <Icon
+              icon="eos-icons:three-dots-loading"
+              width="50"
+              height="40"
+              color="white"
+              className="bg-bgColor rounded-md"
+            />
+          ) : (
+            <Button className="bg-bgColor hover:bg-red-700" type="submit">
+              بحث
+            </Button>
+          )}
+        </form>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Patient
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Doctor
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                City
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredExaminations.map((examination) => (
-              <tr key={examination.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {examination.patient?.full_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {examination.doctor?.full_name}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="max-w-xs truncate">
-                    {examination.description_of_status}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {examination.city}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      examination.status === "accepted"
-                        ? "bg-green-100 text-green-800"
-                        : examination.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {examination.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => handleDeleteExamination(examination.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-[400px]">
+          <Preloader />
+        </div>
+      ) : error ? (
+        <div className="text-red-500 p-4 text-center">{error.message}</div>
+      ) : data?.Data?.data?.length === 0 ? (
+        <div className="text-center p-8 text-gray-600 text-lg">
+          لا يوجد فحوصات بهذا الاسم
+        </div>
+      ) : (
+        <>
+          <AdminExaminationsTable
+            examinations={data?.Data?.data || []}
+            isLoading={isLoading}
+            LoadingDelete={LoadingDelete}
+            handleDeleteExamination={handleDeleteExamination}
+          />
+
+          {!searchTerm && data?.Data && (
+            <div className="mt-4">
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={data?.Data?.last_page}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

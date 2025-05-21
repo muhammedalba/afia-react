@@ -57,7 +57,7 @@ const PatientLogin = () => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    if (data?.status === 200) {
+    if (isSuccess && data?.status === 200) {
       cookies.set("token", data?.Token);
       cookies.set("full_name", data?.Data?.full_name);
       cookies.set("role", "patient");

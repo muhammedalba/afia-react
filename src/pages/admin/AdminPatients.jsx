@@ -13,11 +13,15 @@ import { pageTitle } from "../../helper";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import CustomPagination from "../../components/Pagination/CustomPagination";
 import { useDebounce } from "use-debounce";
+import { Icon } from "@iconify/react";
+
 const AdminPatients = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     pageTitle("لوحة التحكم");
   }, []);
+
+  //
   const [debouncedSearchTerm] = useDebounce("s", 500);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,11 +32,10 @@ const AdminPatients = () => {
     error,
   } = useGetAllResourcesQuery(
     searchTerm
-      ? `/Search_for_patient/${searchTerm}`
-      : `/Display_patients?page=${currentPage}`
+      ? `/Search_for_patient/${debouncedSearchTerm}`
+      : `/Display_patients?page=${1}`
   );
-  console.log(searchTerm);
-  console.log(response, "response");
+
 
   const [
     deletePatient,
@@ -80,7 +83,7 @@ const AdminPatients = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة المرضى</h1>
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form onSubmit={handleSearch} className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Input
               type="text"
@@ -92,9 +95,19 @@ const AdminPatients = () => {
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           </div>
-          <Button className=" bg-bgColor hover:bg-red-700" type="submit">
-            بحث
-          </Button>
+          {isLoading ? (
+            <Icon
+              icon="eos-icons:three-dots-loading"
+              width="50"
+              height="40"
+              color="white"
+              className="bg-bgColor rounded-md"
+            />
+          ) : (
+            <Button className=" bg-bgColor hover:bg-red-700" type="submit">
+              بحث
+            </Button>
+          )}
         </form>
       </div>
 
@@ -157,9 +170,19 @@ const AdminPatients = () => {
                                     isLoading || LoadingDelete || LoadingApprove
                                   }
                                   variant="ghost"
-                                  className="text-indigo-600 hover:text-indigo-900 ml-4"
+                                  className="bg-indigo-500 hover:text-white text-white hover:bg-indigo-600 ml-4"
                                 >
-                                  موافقة
+                                  {LoadingApprove ? (
+                                    <Icon
+                                      icon="eos-icons:loading"
+                                      width="200"
+                                      height="75"
+                                      color="white"
+                                      className=" rounded-md"
+                                    />
+                                  ) : (
+                                    "موافقة"
+                                  )}
                                 </Button>
                               }
                               className="bg-green-600 hover:bg-green-800"
@@ -180,7 +203,17 @@ const AdminPatients = () => {
                               variant="ghost"
                               className="bg-bgColor  hover:bg-red-700 text-white   hover:text-white"
                             >
-                              حذف
+                              {LoadingDelete ? (
+                                <Icon
+                                  icon="eos-icons:loading"
+                                  width="75"
+                                  height="75"
+                                  color="white"
+                                  className="bg-bgColor rounded-md"
+                                />
+                              ) : (
+                                "حذف"
+                              )}
                             </Button>
                           }
                           title="تأكيد الحذف"

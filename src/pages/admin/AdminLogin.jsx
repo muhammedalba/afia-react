@@ -30,8 +30,9 @@ const AdminLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const [authApi, { data, error: FiledError, isLoading }] =
+  const [authApi, { data, error: FiledError, isLoading ,isSuccess}] =
     useAuthApiMutation();
+
 
   // 2.  useForm  yupResolver
   const {
@@ -46,12 +47,11 @@ const AdminLogin = () => {
     pageTitle(" تسجيل دخول المسؤول");
   }, []);
   useEffect(() => {
-    if (data) {
+    if (isSuccess && data) {
       cookies.set("token", data.token);
       cookies.set("full_name", data.admin.full_name);
       cookies.set("role", "admin");
       successNotify("تم تسجيل الدخول بنجاح");
-      console.log("data", data?.admin);
       login({ ...data?.admin, role: "admin" });
       navigate("/admin/dashboard");
     }
