@@ -1,7 +1,14 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
-import { allRoutes } from "./routes/routes";
+import { adminRoutes, patientRoutes, publicRoutes } from "./routes/routes";
+import AdminLayout from "./layouts/AdminLayout";
 
 // Import all page components
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -46,9 +53,35 @@ const componentMap = {
 const AppRouter = () => {
   const { user } = useAuth();
 
-  const renderRoute = (route) => {
+  const renderAdminRoute = (route) => {
     const Component = componentMap[route.element];
+    if (!Component) {
+      console.error(`Component ${route.element} not found`);
+      return null;
+    }
 
+    // For admin login, render without layout
+    if (route.path === "/admin/login") {
+      return (
+        <Route key={route.path} path={route.path} element={<Component />} />
+      );
+    }
+
+    return null; // Other admin routes will be handled by the admin layout route
+  };
+
+  const renderPublicRoute = (route) => {
+    const Component = componentMap[route.element];
+    if (!Component) {
+      console.error(`Component ${route.element} not found`);
+      return null;
+    }
+
+    return <Route key={route.path} path={route.path} element={<Component />} />;
+  };
+
+  const renderPatientRoute = (route) => {
+    const Component = componentMap[route.element];
     if (!Component) {
       console.error(`Component ${route.element} not found`);
       return null;
@@ -58,20 +91,58 @@ const AppRouter = () => {
   };
 
   return (
-    <BrowserRouter future={{
-  v7_startTransition: true,
-  v7_relativeSplatPath: true
-}}>
-      <div className="min-h-screen bg-gray-100">
-        <Header />
-        <main className="">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {allRoutes.map(renderRoute)}
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      <Routes>
+        {/* Public routes with header and footer */}
+        <Route
+          element={
+            <>
+              <Header />
+              <main>
+                <Outlet />
+              </main>
+              <Footer />
+            </>
+          }
+        >
+          {publicRoutes.map(renderPublicRoute)}
+        </Route>
+
+        {/* Admin routes */}
+        <Route path="/admin">
+          {/* Admin login route */}
+          <Route path="login" element={<AdminLogin />} />
+
+          {/* Admin layout routes */}
+          <Route
+            element={
+              <AdminLayout>
+                <Outlet />
+              </AdminLayout>
+            }
+          >
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="doctors" element={<AdminDoctors />} />
+            <Route path="patients" element={<AdminPatients />} />
+            <Route path="examinations" element={<AdminExaminations />} />
+            <Route path="donations" element={<AdminDonations />} />
+            <Route path="statistics" element={<AdminStatistics />} />
+            {/* Redirect /admin to /admin/dashboard */}
+            <Route index element={<Navigate to="dashboard" replace />} />
+          </Route>
+        </Route>
+
+        {/* Patient routes */}
+        {patientRoutes.map(renderPatientRoute)}
+
+        {/* Catch all route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 };
