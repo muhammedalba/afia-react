@@ -31,7 +31,8 @@ const Header = () => {
   const patientLinks = [{ to: "/patient/dashboard", label: "لوحة التحكم" }];
 
   const renderNavLinks = () => {
-    if (!user) return null;
+    if (!user?.role) return null;
+    console.log(user);
 
     const links = user?.role === "admin" ? adminLinks : patientLinks;
 
@@ -113,7 +114,7 @@ const Header = () => {
           <div className="container ">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
-                {user ? (
+                {user?.role ? (
                   <div className="flex items-center space-x-4 rtl:space-x-reverse">
                     <DropdownMenu>
                       <DropdownMenuTrigger>
@@ -177,10 +178,8 @@ const Header = () => {
                         icon="mingcute:dashboard-line"
                         width="24"
                         height="24"
-                       
                       />
                     </Link>
-                    
                   </div>
                 ) : (
                   <div className="flex items-center space-x-4 rtl:space-x-reverse">
