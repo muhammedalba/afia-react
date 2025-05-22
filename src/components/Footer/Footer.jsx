@@ -8,7 +8,7 @@ const Footer = () => {
         src={logo}
         width={75}
         alt="logo"
-        className="absolute  -top-[30px] right-[30px]"
+        className="absolute z-30  -top-[30px] right-[30px]"
       />
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

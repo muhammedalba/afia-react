@@ -17,7 +17,7 @@ import AdminPatients from "./pages/admin/AdminPatients";
 import AdminDoctors from "./pages/admin/AdminDoctors";
 import AdminExaminations from "./pages/admin/AdminExaminations";
 import AdminDonations from "./pages/admin/AdminDonations";
-import AdminStatistics from "./pages/admin/AdminStatistics";
+import AdminProfile from "./pages/admin/AdminProfile";
 import PatientLogin from "./pages/patient/PatientLogin";
 import PatientRegister from "./pages/patient/PatientRegister";
 import PatientDashboard from "./pages/patient/PatientDashboard";
@@ -38,7 +38,8 @@ const componentMap = {
   AdminDoctors,
   AdminExaminations,
   AdminDonations,
-  AdminStatistics,
+
+  AdminProfile,
   PatientLogin,
   PatientRegister,
   PatientDashboard,
@@ -48,6 +49,23 @@ const componentMap = {
   Login,
   NotFound,
   About,
+};
+
+// Protected Route Component
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const { user } = useAuth();
+
+  if (!user) {
+    // Redirect to login if not authenticated
+    return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
+    // Redirect to home if not authorized
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 };
 
 const AppRouter = () => {
@@ -60,14 +78,25 @@ const AppRouter = () => {
       return null;
     }
 
-    // For admin login, render without layout
+    // For admin login, render without protection
     if (route.path === "/admin/login") {
       return (
         <Route key={route.path} path={route.path} element={<Component />} />
       );
     }
 
-    return null; // Other admin routes will be handled by the admin layout route
+    // For other admin routes, add protection
+    return (
+      <Route
+        key={route.path}
+        path={route.path}
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <Component />
+          </ProtectedRoute>
+        }
+      />
+    );
   };
 
   const renderPublicRoute = (route) => {
@@ -87,7 +116,25 @@ const AppRouter = () => {
       return null;
     }
 
-    return <Route key={route.path} path={route.path} element={<Component />} />;
+    // For patient login and register, render without protection
+    if (route.path === "/patient/login" || route.path === "/patient/register") {
+      return (
+        <Route key={route.path} path={route.path} element={<Component />} />
+      );
+    }
+
+    // For other patient routes, add protection
+    return (
+      <Route
+        key={route.path}
+        path={route.path}
+        element={
+          <ProtectedRoute requiredRole="patient">
+            <Component />
+          </ProtectedRoute>
+        }
+      />
+    );
   };
 
   return (
@@ -121,9 +168,11 @@ const AppRouter = () => {
           {/* Admin layout routes */}
           <Route
             element={
-              <AdminLayout>
-                <Outlet />
-              </AdminLayout>
+              <ProtectedRoute requiredRole="admin">
+                <AdminLayout>
+                  <Outlet />
+                </AdminLayout>
+              </ProtectedRoute>
             }
           >
             <Route path="dashboard" element={<AdminDashboard />} />
@@ -131,7 +180,7 @@ const AppRouter = () => {
             <Route path="patients" element={<AdminPatients />} />
             <Route path="examinations" element={<AdminExaminations />} />
             <Route path="donations" element={<AdminDonations />} />
-            <Route path="statistics" element={<AdminStatistics />} />
+            <Route path="profile" element={<AdminProfile />} />
             {/* Redirect /admin to /admin/dashboard */}
             <Route index element={<Navigate to="dashboard" replace />} />
           </Route>

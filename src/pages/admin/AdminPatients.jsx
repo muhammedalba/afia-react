@@ -80,7 +80,7 @@ const AdminPatients = () => {
   const patients = response?.Data?.data || [];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className=" mx-auto ">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة المرضى</h1>
         <form onSubmit={handleSearch} className="flex gap-2 items-center">

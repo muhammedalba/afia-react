@@ -1,15 +1,12 @@
 import React, { createContext, useContext, useState } from "react";
 import Cookies from "universal-cookie";
 
-
-
-
-
 const AuthContext = createContext(null);
 const cookies = new Cookies();
+const lugedUser = cookies.getAll();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(lugedUser);
 
   const login = (userData) => {
     setUser(userData);

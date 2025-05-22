@@ -35,16 +35,93 @@ const AdminExaminationsTable = ({ examinations, onDelete }) => {
                 {exam.patient?.full_name || "-"}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
-                {exam.description_of_status || "-"}
+              
+                {exam.description_of_status ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedDetails(exam)}
+                      >
+                        وصف الحالة
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md  text-end h-[90vh]">
+                      <DialogHeader className="p-0 m-0 block">
+                        <DialogTitle className="p-0 m-0"> </DialogTitle>
+                        <DialogDescription className="p-0 m-0"></DialogDescription>
+                        <div className=" text-gray-800 text-start pt-6">
+                          <p>
+                            <strong>وصف الحالة: </strong> {exam.notes}
+                          </p>
+                        </div>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  "-"
+                )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
                 {exam.time || "-"}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
-                {exam.medications_taken || "-"}
+           
+                {exam.medications_taken ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedDetails(exam)}
+                      >
+                        الأدوية
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md  text-end h-[90vh]">
+                      <DialogHeader className="p-0 m-0 block">
+                        <DialogTitle className="p-0 m-0"> </DialogTitle>
+                        <DialogDescription className="p-0 m-0"></DialogDescription>
+                        <div className=" text-gray-800 text-start pt-6">
+                          <p>
+                            <strong>الأدوية: </strong> {exam.notes}
+                          </p>
+                        </div>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  "-"
+                )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
-                {exam.notes || "-"}
+                {exam.notes ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedDetails(exam)}
+                      >
+                        ملاحظات
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md  text-end h-[90vh]">
+                      <DialogHeader className="p-0 m-0 block">
+                        <DialogTitle className="p-0 m-0"> </DialogTitle>
+                        <DialogDescription className="p-0 m-0"></DialogDescription>
+                        <div className=" text-gray-800 text-start pt-6">
+                          <p>
+                            <strong>ملاحظات: </strong> {exam.notes}
+                          </p>
+                        </div>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  "-"
+                )}
               </td>
 
               {/* عمود عرض التقرير */}
@@ -102,7 +179,8 @@ const AdminExaminationsTable = ({ examinations, onDelete }) => {
                     </DialogHeader>
                     <div className="space-y-3 mt-4 text-gray-800">
                       <p>
-                        <strong>التاريخ: </strong> {selectedDetails?.time || "-"}
+                        <strong>التاريخ: </strong>{" "}
+                        {selectedDetails?.time || "-"}
                       </p>
                       <p>
                         <strong>تاريخ مرضي:</strong>{" "}

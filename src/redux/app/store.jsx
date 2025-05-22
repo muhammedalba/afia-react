@@ -4,17 +4,11 @@ import { apiSlice } from "../features/api/apiSlice";
 import { authSlice } from "../features/api/users/AuthSlice";
 
 import SerchSlice from "../features/Slice/SerchSlice";
-import  CartSlice  from "../features/Slice/CartSlice";
+import CartSlice from "../features/Slice/CartSlice";
 import QuantityResultSlice from "../features/Slice/QuantityResultSlice";
 import NavigationSlice from "../features/Slice/NavigationSlice";
 import CategoriesSlice from "../features/Slice/CategoriesSlice";
 import BrandSlice from "../features/Slice/BrandSlice";
-
-
-
-
-
-
 
 const store = configureStore({
   reducer: {
@@ -32,7 +26,7 @@ const store = configureStore({
   },
   // إعداد middleware الخاص بـ RTK Query
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware,authSlice.middleware),
+    getDefaultMiddleware().concat(apiSlice.middleware, authSlice.middleware),
 });
 
 // console.log(store.getState(),'store');

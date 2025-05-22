@@ -14,7 +14,6 @@ import { Icon } from "@iconify/react";
 
 const Header = () => {
   const { user, logout } = useAuth();
-  console.log(user, "user");
 
   const navigate = useNavigate();
   const [mobileToggle, setMobileToggle] = useState(false);
@@ -160,10 +159,28 @@ const Header = () => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-
                     <span className="text-textColor">
                       مرحباً، <span>{user?.full_name || user?.email}</span>
                     </span>
+                    <Link to="/" className="flex items-center">
+                      <Icon
+                        color="fc4c55"
+                        icon="line-md:home-twotone"
+                        width="24"
+                        height="24"
+                        path="/"
+                      />
+                    </Link>
+                    <Link to="/admin/dashboard" className="flex items-center">
+                      <Icon
+                        color="fc4c55"
+                        icon="mingcute:dashboard-line"
+                        width="24"
+                        height="24"
+                       
+                      />
+                    </Link>
+                    
                   </div>
                 ) : (
                   <div className="flex items-center space-x-4 rtl:space-x-reverse">

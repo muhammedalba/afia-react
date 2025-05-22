@@ -1,183 +1,113 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import React, { useEffect, useState } from "react";
+import {
+  useGetAllResourcesQuery,
+  useDeleteResourceMutation,
+} from "../../redux/features/api/apiSlice";
+import Preloader from "../../components/Preloader/Preloader";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Search } from "lucide-react";
+import { pageTitle } from "../../helper";
+import CustomPagination from "../../components/Pagination/CustomPagination";
+import { useDebounce } from "use-debounce";
+import { Icon } from "@iconify/react";
+import AdminDonationsTable from "../../components/Table/Table";
 
 const AdminDonations = () => {
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { user } = useAuth();
-
   useEffect(() => {
-    fetchDonations();
+    window.scrollTo(0, 0);
+    pageTitle("لوحة التحكم");
   }, []);
 
-  const fetchDonations = async () => {
-    try {
-      const response = await fetch(
-        "https://lavenderblush-owl-178559.hostingersite.com/api/Display_all_donations",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+  const [currentPage, setCurrentPage] = useState(1);
 
-      if (!response.ok) throw new Error("Failed to fetch donations");
-
-      const data = await response.json();
-      setDonations(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleApproveDonation = async (donationId) => {
-    try {
-      const response = await fetch(
-        `https://lavenderblush-owl-178559.hostingersite.com/api/Approve_donation/${donationId}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to approve donation");
-
-      // Refresh donation list
-      fetchDonations();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleCancelDonation = async (donationId) => {
-    try {
-      const response = await fetch(
-        `https://lavenderblush-owl-178559.hostingersite.com/api/Cancel_doantion/${donationId}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to cancel donation");
-
-      // Refresh donation list
-      fetchDonations();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const filteredDonations = donations.filter(
-    (donation) =>
-      donation.donor_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      donation.blood_type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      donation.hospital_name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      donation.city?.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data, isLoading, error } = useGetAllResourcesQuery(
+    `/Display_all_donations?page=${currentPage}&search=${debouncedSearchTerm}`
   );
 
-  if (loading) return <div className="text-center p-4">Loading...</div>;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
+  const [deleteDonation, { isLoading: LoadingDelete }] =
+    useDeleteResourceMutation();
+
+  const handleDeleteDonation = async (donationId) => {
+    try {
+      await deleteDonation(donationId).unwrap();
+    } catch (err) {
+      console.error("Failed to delete donation:", err);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-4">Blood Donation Management</h1>
-        <input
-          type="text"
-          placeholder="Search donations..."
-          className="w-full p-2 border rounded"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <h1 className="text-2xl font-bold mb-4 text-right">إدارة التبرعات</h1>
+        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="ابحث عن تبرع بالاسم أو المدينة..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 ring-1 bg-white focus-visible:ring-bgColor text-right"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
+          {isLoading ? (
+            <Icon
+              icon="eos-icons:three-dots-loading"
+              width="50"
+              height="40"
+              color="white"
+              className="bg-bgColor rounded-md"
+            />
+          ) : (
+            <Button className="bg-bgColor hover:bg-red-700" type="submit">
+              بحث
+            </Button>
+          )}
+        </form>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Donor Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Blood Type
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Hospital
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                City
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredDonations.map((donation) => (
-              <tr key={donation.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {donation.donor_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {donation.blood_type}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {donation.hospital_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{donation.city}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      donation.status === "approved"
-                        ? "bg-green-100 text-green-800"
-                        : donation.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {donation.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  {donation.status === "pending" && (
-                    <>
-                      <button
-                        onClick={() => handleApproveDonation(donation.id)}
-                        className="text-green-600 hover:text-green-900 mr-4"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleCancelDonation(donation.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-[400px]">
+          <Preloader />
+        </div>
+      ) : error ? (
+        <div className="text-red-500 p-4 text-center">{error.message}</div>
+      ) : data?.Data?.data?.length === 0 ? (
+        <div className="text-center p-8 text-gray-600 text-lg">
+          لا يوجد تبرعات بهذا الاسم
+        </div>
+      ) : (
+        <>
+          <AdminDonationsTable
+            donations={data?.Data?.data || []}
+            isLoading={isLoading}
+            LoadingDelete={LoadingDelete}
+            handleDeleteDonation={handleDeleteDonation}
+          />
+
+          {!searchTerm && data?.Data && (
+            <div className="mt-4">
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={data?.Data?.last_page}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

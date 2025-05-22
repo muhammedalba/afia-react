@@ -112,7 +112,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-
+{/* 
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6 text-right">
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
