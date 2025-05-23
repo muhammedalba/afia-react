@@ -14,9 +14,7 @@ import { Icon } from "@iconify/react";
 
 const Header = () => {
   const { user, logout } = useAuth();
-
   const navigate = useNavigate();
-  const [mobileToggle, setMobileToggle] = useState(false);
   const handleLogout = async () => {
     try {
       await logout();
@@ -32,7 +30,6 @@ const Header = () => {
 
   const renderNavLinks = () => {
     if (!user?.role) return null;
-    console.log(user);
 
     const links = user?.role === "admin" ? adminLinks : patientLinks;
 
@@ -55,7 +52,7 @@ const Header = () => {
     <>
       <nav className="sticky  w-full top-0 z-50  ">
         {/* top bar */}
-        <div className=" bg-gray-100 py-2 hidden md:block  ">
+        <div className=" bg-gray-100  ">
           <div className="p-2 ">
             <div className=" w-full flex  items-center justify-between">
               <div className="">
@@ -76,13 +73,16 @@ const Header = () => {
                 </ul>
               </div>
               <div>
-                <ul className="w-full flex  items-center justify-between">
+                <ul className="  w-full flex   items-center justify-between">
                   <li className="px-2   ">
                     <a
                       href="http//"
                       className="items-center flex justify-between "
                     >
+                      <span className=" hidden md:block">
                       +963 998 942 124
+
+                      </span>
                       <Icon
                         icon={"carbon:phone-filled"}
                         width={"20"}
@@ -95,7 +95,10 @@ const Header = () => {
                       href="mailto:medlife056@gmail.com"
                       className="text-decoration-none flex  items-center justify-between"
                     >
+                      <span  className=" hidden md:block">
+
                       medlife056@gmail.com
+                      </span>
                       <Icon
                         className="mx-1"
                         icon={"line-md:email"}

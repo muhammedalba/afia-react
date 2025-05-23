@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
 import { pageTitle } from "../../helper";
 import medLifeImg from "../../assets/medLife.png";
+import { motion, useAnimation } from "framer-motion";
 
 const developers = [
   {
@@ -92,9 +92,8 @@ const About = () => {
             color="fc4c56"
             width={"50"}
             icon={"hugeicons:computer-programming-01"}
-            />
-            القسم التقني
-        
+          />
+          القسم التقني
         </h2>
         <p className="text-lg text-center text-gray-700 leading-relaxed">
           إيمانًا منا بأهمية التكنولوجيا في تسهيل حياة الناس، أُنشئ القسم التقني
@@ -114,8 +113,6 @@ const About = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-3xl font-bold text-center text-bgColor mb-8">
-          
-          
           لماذا نحن؟
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -156,50 +153,45 @@ const About = () => {
       </motion.section>
 
       {/* Developers Section */}
-      <motion.section
-        className="py-16 px-4 max-w-7xl mx-auto"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
+      <section className="py-16 px-4 max-w-7xl mx-auto overflow-hidden">
         <h2 className="text-3xl font-bold flex items-center justify-center text-bgColor mb-2">
-        <Icon
-            color="fc4c56"
-            width={"50"}
-            icon={"hugeicons:developer"}
-            />
-          
+          <Icon color="fc4c56" width={"50"} icon={"hugeicons:developer"} />
           فريق المطورين
         </h2>
         <h2 className="text-center text-2xl py-5">
           تم تطوير تطبيق "عافية" بأيادٍ مؤمنة برسالة الخير، من قبل فريق تقني
           تطوعي عمل بإخلاص ومحبة
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {developers.map((dev, index) => (
-            <motion.div
-              key={index}
-              className="bg-white rounded-lg shadow-md p-6 text-center"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <img
-                src={dev.image}
-                alt={dev.name}
-                className="w-32 h-32 mx-auto rounded-full object-cover mb-4"
-              />
-              <h3 className="text-xl font-semibold">{dev.name}</h3>
-              <p className="text-bgColor flex items-center justify-center gap-2">
-                <Icon icon="mdi:account" className="text-lg text-bgColor" />
-                {dev.role}
-              </p>
-            </motion.div>
-          ))}
+
+       
+
+        {/* Marquee */}
+        <div className="relative w-full overflow-hidden">
+          <div
+            className="flex gap-8 w-fit animate-marquee p-5 pause-marquee"
+            
+            style={{ whiteSpace: "nowrap" }}
+          >
+            {[...developers, ...developers].map((dev, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-md p-6 text-center w-80 flex-shrink-0"
+              >
+                <img
+                  src={dev.image}
+                  alt={dev.name}
+                  className="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+                />
+                <h3 className="text-xl font-semibold">{dev.name}</h3>
+                <p className="text-bgColor flex items-center justify-center gap-2">
+                  <Icon icon="mdi:account" className="text-lg text-bgColor" />
+                  {dev.role}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Testimonials */}
       <motion.section
@@ -210,13 +202,7 @@ const About = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-3xl text-bgColor font-bold flex items-center justify-center mb-8">
-
-        <Icon
-            color="fc4c56"
-            width={"50"}
-            icon={"entypo:users"}
-            />
-          
+          <Icon color="fc4c56" width={"50"} icon={"entypo:users"} />
           ماذا يقول عملاؤنا؟
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -295,14 +281,14 @@ const About = () => {
         </h2>
         <div className="aspect-w-16 aspect-h-9">
           <iframe
-            width="853"
+           className="m-auto w-full sm:w-[70%]"
             height="480"
             src="https://www.youtube.com/embed/T9HXoUmdJhA"
             title="التعاطف: الرابط الإنساني للعناية بالمرضى"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
           ></iframe>
         </div>
       </motion.section>

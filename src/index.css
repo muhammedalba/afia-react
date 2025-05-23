@@ -14,7 +14,9 @@
   --secondary-color: #f3f4f6;
 
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Amiri", serif;
+
+  font-style: normal;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -100,6 +102,7 @@
 
     --radius: 0.5rem;
   }
+
   .dark {
 
 
@@ -184,7 +187,35 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* marquee */
+@keyframes marquee {
+  0% {
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    -o-transform: translateX(0%);
+    transform: translateX(0%);
+  }
+
+  100% {
+    -webkit-transform: translateX(50%);
+    -moz-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    -o-transform: translateX(50%);
+    transform: translateX(50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.pause-marquee:hover {
+  animation-play-state: paused;
 }

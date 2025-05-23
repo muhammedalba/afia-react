@@ -23,31 +23,32 @@ const AdminProfile = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="max-w-5xl mx-auto"
+        className="max-w-6xl mx-auto"
       >
-        <div className="bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-100">
-          {/* رأس الصفحة */}
-          <div className="bg-gradient-to-l from-primary to-secondary text-white px-10 py-8 relative">
-            <div className="flex items-center gap-6 flex-row-reverse">
-              <div className="w-28 h-28 rounded-full border-4 border-white overflow-hidden shadow-lg bg-white/20 flex items-center justify-center">
+        <div className="bg-white shadow-xl rounded-3xl overflow-hidden border border-gray-100">
+          {/* Header */}
+          <div className="bg-gradient-to-l from-bgColor to-secondary text-white px-6 md:px-10 py-8 relative">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+              <div className="w-28 h-28 rounded-full border-4 border-white overflow-hidden shadow-lg bg-white/50 flex items-center justify-center">
                 <Icon
                   icon="mdi:account-circle"
+                  color="fc4c56"
                   className="w-24 h-24 text-white"
                 />
               </div>
-              <div>
-                <h1 className="text-4xl font-bold">{profile?.full_name}</h1>
+              <div className="text-center md:text-right">
+                <h1 className="text-3xl md:text-4xl font-bold">{profile?.full_name}</h1>
                 <p className="text-white/80 text-lg mt-1">مدير النظام</p>
               </div>
             </div>
           </div>
 
-          {/* محتوى الملف */}
-          <div className="px-10 py-8">
-            <div className="grid md:grid-cols-2 gap-10">
-              {/* القسم الشخصي */}
+          {/* Content */}
+          <div className="px-6 md:px-10 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* Personal Info */}
               <section>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
                   المعلومات الشخصية
                 </h2>
                 <div className="space-y-5">
@@ -64,9 +65,9 @@ const AdminProfile = () => {
                 </div>
               </section>
 
-              {/* القسم الإداري */}
+              {/* Account Info */}
               <section>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
                   معلومات الحساب
                 </h2>
                 <div className="space-y-5">
@@ -75,46 +76,18 @@ const AdminProfile = () => {
                     label="عضو منذ"
                     value={
                       profile?.created_at
-                        ? new Date(profile.created_at).toLocaleDateString(
-                            "ar-EG"
-                          )
+                        ? new Date(profile.created_at).toLocaleDateString("ar-EG")
                         : "غير متوفر"
                     }
                   />
                   <ProfileItem
                     icon="mdi:shield-check-outline"
                     label="حالة الحساب"
-                    value={
-                      <span className="text-green-600 font-semibold">نشط</span>
-                    }
+                    value={<span className="text-green-600 font-semibold">نشط</span>}
                   />
                 </div>
               </section>
             </div>
-
-            {/* الإجراءات السريعة */}
-            {/* <div className="mt-12 border-t pt-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                إجراءات سريعة
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <ActionButton
-                  icon="mdi:pencil-outline"
-                  label="تعديل الملف"
-                  color="blue"
-                />
-                <ActionButton
-                  icon="mdi:shield-lock-outline"
-                  label="تغيير كلمة المرور"
-                  color="green"
-                />
-                <ActionButton
-                  icon="mdi:bell-outline"
-                  label="إعدادات الإشعارات"
-                  color="purple"
-                />
-              </div>
-            </div> */}
           </div>
         </div>
       </motion.div>
@@ -122,37 +95,16 @@ const AdminProfile = () => {
   );
 };
 
-const ProfileItem = ({
-  icon,
-  label,
-  value,
-}) => (
+const ProfileItem = ({ icon, label, value }) => (
   <div className="flex items-start gap-3 flex-row-reverse">
-    <Icon icon={icon} className="w-6 h-6 text-primary mt-1" />
-    <div>
+    <div className="flex-shrink-0">
+      <Icon icon={icon} color="fc4c56" className="w-6 h-6 text-primary mt-1" />
+    </div>
+    <div className="flex-1">
       <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-gray-800 font-medium">{value}</p>
+      <p className="text-gray-800 font-medium break-words">{value}</p>
     </div>
   </div>
 );
-
-const ActionButton = ({
-  icon,
-  label,
-  color,
-}) => {
-  const bg = `bg-${color}-50`;
-  const text = `text-${color}-600`;
-  const hover = `hover:bg-${color}-100`;
-
-  return (
-    <button
-      className={`flex items-center justify-center gap-2 ${bg} ${text} px-4 py-3 rounded-xl transition-colors ${hover} text-sm font-medium`}
-    >
-      <Icon icon={icon} className="w-5 h-5" />
-      {label}
-    </button>
-  );
-};
 
 export default AdminProfile;

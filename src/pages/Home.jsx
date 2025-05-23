@@ -202,7 +202,7 @@ export default function Home() {
 
       {/* Doctors Section with Multi-Card Carousel */}
 
-      <DoctorsSection />
+      {/* <DoctorsSection /> */}
 
       {/* About Section with Animated Stats */}
       <div className="py-16 bg-white">
