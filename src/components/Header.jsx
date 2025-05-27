@@ -230,7 +230,7 @@ const Header = () => {
                     <img
                       src={logo}
                       alt="Afia Logo"
-                      className="h-[4rem] md:h-[5rem] w-auto mr-2"
+                      className="h-[3.8rem]  w-auto mr-2"
                     />
                   </Link>
                 </div>
