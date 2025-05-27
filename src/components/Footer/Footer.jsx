@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/AfiaLogo.png";
+import { Icon } from "@iconify/react";
 const Footer = () => {
   return (
     <footer className="bg-bgColor text-minColor relative">
@@ -32,7 +33,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/patient/register"
+                  to="/patient/login"
                   className="hover:text-textColor transition"
                 >
                   تسجيل كمريض
@@ -43,7 +44,7 @@ const Footer = () => {
                   to="/admin/login"
                   className="hover:text-textColor transition"
                 >
-                  تسجيل دخول الطبيب
+                  تسجيل دخول المسؤول
                 </Link>
               </li>
             </ul>
@@ -75,14 +76,58 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">تواصل معنا</h3>
             <ul className="space-y-2">
-              <li>البريد الإلكتروني: medlife056@gmail.com</li>
-              <li>الموقع الإلكتروني:<br/>
-                <a href="https://medlife.hurufy.com">
-              medlife.hurufy.com 
-              </a></li>
+              <li>
+                <a
+                  href="https://medlife.hurufy.com/"
+                  className="flex items-center justify-start gap-x-2"
+                >
+                  <span>
+                    {" "}
+                    <Icon
+                      color="white"
+                      icon="icon-park-outline:earth"
+                      width="25"
+                      height="25"
+                    />
+                  </span>
+                  medlife.hurufy.com{" "}
+                </a>{" "}
+              </li>
 
-              <li>الهاتف: +963 998 942 124</li>
-              <li>العنوان: 123 شارع المركز الطبي</li>
+              <li>
+                <a
+                  href="mailto:medlife056@gmail.com"
+                  className="flex items-center justify-start gap-x-2"
+                >
+                  <span>
+                    {" "}
+                    <Icon
+                      color="white"
+                      icon="iconamoon:email-thin"
+                      width="25"
+                      height="25"
+                    />
+                  </span>
+                  medlife056@gmail.com
+                </a>{" "}
+              </li>
+              <li>
+                <a
+                  href="tel:+963998942124"
+                  className="flex items-center justify-start gap-x-2"
+                >
+                  <span>
+                    {" "}
+                    <Icon
+                      color="white"
+                      icon="iconamoon:phone-thin"
+                      width="25"
+                      height="25"
+                    />
+                  </span>
+                  0963998942124
+                </a>{" "}
+              </li>
             </ul>
           </div>
         </div>

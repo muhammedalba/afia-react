@@ -3,42 +3,71 @@ import { Icon } from "@iconify/react";
 import { pageTitle } from "../../helper";
 import medLifeImg from "../../assets/medLife.png";
 import { motion, useAnimation } from "framer-motion";
+import { Link } from "lucide-react";
 
 const developers = [
   {
     name: "م. خولة محمد",
     role: " قائدة الفريق التقني",
-    image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+    socialMedia: {
+      whatsapp: "tel:+4917672749594",
+      linkedin: "https://www.linkedin.com/in/muhammed-albahlee",
+    },
   },
   {
     name: "م. صبحي الأبواحمد",
     role: " Back-End Developer",
     image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
   {
     name: "م. عرين حسن",
     role: "Front-End Developer",
-    image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
   {
     name: "م. ليلى الدروبي",
     role: "UI/UX Designer",
-    image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
   {
     name: "م. محمد البهلة",
     role: "Front-End Developer",
     image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
   {
     name: "م. محمود المقداد",
     role: "Front-End Developer",
     image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
   {
     name: "م. خالد الحميدات ",
     role: "Back-End Developer",
     image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    socialMedia: {
+      whatsapp: "",
+      linkedin: "",
+    },
   },
 ];
 
@@ -163,13 +192,10 @@ const About = () => {
           تطوعي عمل بإخلاص ومحبة
         </h2>
 
-       
-
         {/* Marquee */}
         <div className="relative w-full overflow-hidden">
           <div
             className="flex gap-8 w-fit animate-marquee p-5 pause-marquee"
-            
             style={{ whiteSpace: "nowrap" }}
           >
             {[...developers, ...developers].map((dev, index) => (
@@ -187,6 +213,22 @@ const About = () => {
                   <Icon icon="mdi:account" className="text-lg text-bgColor" />
                   {dev.role}
                 </p>
+                <div className="flex items-center justify-center gap-x-2">
+                  <a className="" href={dev.socialMedia.whatsapp}>
+                    <Icon
+                      width="30"
+                      icon="mdi:whatsapp"
+                      className="text-lg text-bgColor"
+                    />
+                  </a>
+                  <a className="" href={dev.socialMedia.linkedin}>
+                    <Icon
+                      width="30"
+                      icon="mingcute:linkedin-fill"
+                      className="text-lg text-bgColor"
+                    />
+                  </a>
+                </div>
               </div>
             ))}
           </div>
@@ -281,7 +323,7 @@ const About = () => {
         </h2>
         <div className="aspect-w-16 aspect-h-9">
           <iframe
-           className="m-auto w-full sm:w-[70%]"
+            className="m-auto w-full sm:w-[70%]"
             height="480"
             src="https://www.youtube.com/embed/T9HXoUmdJhA"
             title="التعاطف: الرابط الإنساني للعناية بالمرضى"

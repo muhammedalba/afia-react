@@ -7,6 +7,7 @@ import client2 from "../assets/blog1.jpg";
 import client3 from "../assets/blog2.jpg";
 import { Icon } from "@iconify/react";
 import DoctorsSection from "../components/shared/DoctorsCarousel";
+import { Link } from "react-router-dom";
 
 const AnimatedCounter = ({ target, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -54,11 +55,102 @@ export default function Home() {
     },
     {
       image: client3,
-      title: "أحدث التقنيات الطبية",
-      description: "نستخدم أحدث الأجهزة والتقنيات لتقديم أفضل الخدمات",
+      title: "تطبيق عافية الخيري",
+      description: "نستخدم أحدث الخدمات ... نقدم خدمات طبية مجانبة ",
     },
   ];
-
+  const socialMedia = [
+    {
+      Icon: "bi:facebook",
+      link: "https://www.facebook.com/dr.khaled.jomaa?mibextid=ZbWKwL",
+      title: "ميديا لايف-Medlife",
+      description: "لمتابعه كل ما هو جديد ",
+    },
+    {
+      Icon: "bi:facebook",
+      link: "https://www.facebook.com/profile.php?id=61555371066770&mibextid=ZbWKwL",
+      title: " أثر ميديالايف-Athar Medlife ",
+      description:
+        "مشروع طبي انساني أطلقته مؤسسة Med-life (ميدلايف) الطبية التطوعية الخيرية",
+    },
+    {
+      Icon: "bi:facebook",
+      link: "medical-icon:i-cardiology",
+      title: " انضم لكروبنا ",
+      description:
+        "مجموعة طبية يديرها 350 اطباء بشريين و اسنان و صيادلة و العديد من الاختصاصات الطبية الاخرى - يهدف الى نشر التوعية",
+    },
+    {
+      Icon: "fa-brands:facebook-messenger",
+      link: "https://www.facebook.com/messages/t/8092123430799877/",
+      title: "  راسلنا على مسنجر ",
+      description: " لا تتردد في التواصل معنا ",
+    },
+    {
+      Icon: "line-md:instagram",
+      link: "https://www.instagram.com/med.life4ever/?igsh=ZW5pcmphdWl4dXpo#",
+      title: "  تابعنا على انستغرام ",
+      description: "تابعنا لتلقي كل ما هو جديد",
+    },
+    {
+      Icon: "line-md:instagram",
+      link: "https://www.instagram.com/medlife_trends/?igsh=czdrdTJ0OGs1eGtt#",
+      title: "  صفحه اتجاهات الحياة الطبية ",
+      description: "لمعرفة اتجاهات الحياة الطبية",
+    },
+    {
+      Icon: "line-md:instagram",
+      link: "medical-icon:i-cardiology",
+      title: " انضم لكروبنا ",
+      description:
+        "مشروع انساني يهدف لمساعده المرضى المحتاجين تابع لمؤسسة ميدلايف الطبية التطوعيه  ",
+    },
+    {
+      Icon: "mingcute:whatsapp-line",
+      link: "https://www.whatsapp.com/channel/0029VaG0tkGC1FuHOx5In32r",
+      title: "  راسلنا ع الواتس ",
+      description: " تواصل معنا على الواتس اب",
+    },
+    {
+      Icon: "line-md:telegram",
+      link: "https://t.me/medlife0",
+      title: "   قناة التلغرام ",
+      description: " تابعنا ع تلغرام لمعرفة كل ما هو جديد",
+    },
+    {
+      Icon: "bi:facebook",
+      link: "https://t.me/Medlife2024bot",
+      title: " بوت الاستشارات الطبية ",
+      description: " للاستشارة الطبية  مبسطة وسريعه  بكل  سرية واهتمام ",
+    },
+    {
+      Icon: "line-md:youtube",
+      link: "https://www.youtube.com/c/MedLifekjomaa",
+      title: "  قناة اليوتيوب ",
+      description: " تابعنا على اليوتيوب ليصلك كل جديد",
+    },
+    {
+      Icon: "ic:sharp-tiktok",
+      link: "https://www.youtube.com/c/MedLifekjomaa",
+      title: "  قناة التيك توك ",
+      description: " تابعنا على التيك توك ليصلك كل جديد",
+    },
+  ];
+  const Departments = socialMedia.map((e, i) => {
+    return (
+      <Link
+        key={i}
+        to={e.link}
+        className="bg-white p-6 rounded-lg shadow-lg text-center hover:translate-y-2 transition-all"
+      >
+        <div className=" rounded-lg flex items-center justify-center mb-4">
+          <Icon color="fc4c55" icon={e.Icon} width="50" height="50" />
+        </div>
+        <h3 className="text-xl font-semibold mb-2 hover:text-bgColor"> {e.title}</h3>
+        <p className="text-gray-600">{e.description}</p>
+      </Link>
+    );
+  });
   // Hero carousel effect
   useEffect(() => {
     const timer = setInterval(() => {
@@ -95,7 +187,7 @@ export default function Home() {
                       {slide.description}
                     </p>
                     <button className="bg-bgColor text-minColor px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
-                      احجز موعدك الآن
+                      نزل تطبيقنا الان{" "}
                     </button>
                   </div>
                 </div>
@@ -216,29 +308,46 @@ export default function Home() {
               />
             </div>
             <div className="text-right">
+              {/* <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                عن بوت الاستشارات الطبيه
+              </h2> */}
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                عن مركز عافية
+                بوت الاستشارات الطبية-من ميديالايف الى صحتكم
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                نحن نقدم خدمات طبية متكاملة بأحدث التقنيات وأعلى معايير الجودة.
-                يضم مركزنا نخبة من الأطباء المتخصصين في مختلف المجالات الطبية.
+                انطلاقا من ايماننا بان
+                <strong className="text-gray-950">
+                  {" "}
+                  المعلومه الطبيه الصحيحه قد تغير حياه الانسان
+                </strong>{" "}
+                <strong  className="text-gray-950">اطلقنا بوت الاستشارات الطبيه</strong> مطلع عام 2025
+                كمنصه تفاعليه مجانيه تهدف الى ايصال النصيحه الطبيه الامنه لكل من
+                يحتاجها يضم البوت اليوم{" "}
+                <strong  className="text-gray-950">فريقا من 30 طبيبا وطبيبا</strong> طبيا{" "}
+                <strong  className="text-gray-950"> يعملون ضمن 20 اختصاصا </strong> متنوعا ليقدموا استشارات
+                سريعه مبسطه بكل احترام وسريه واهتمام ومنذ انطلاقته قدم البوت
+                اكثر من 250 استشاره طبيه كانت بدايه طبيه لمسار نأمل ان يتسع
+                ليشمل كل من يبحث عن اجابه مطمئنه او توجيه اولي سليم نحن في مؤسسه{" "}
+                <strong  className="text-gray-950">ميديا لايف الطبيه الخيريه</strong> نؤمن بان الطب رساله
+                والتكنولوجيا وسيله لخدمه الانسان ولهذا ولد هذا البوت من القلب
+                وبالعلم ولكل من يحتاجه{" "}
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <AnimatedCounter target={20} />
-                  <div className="text-gray-600">سنوات الخبرة</div>
+                  <AnimatedCounter target={2025} />
+                  <div className="text-gray-600"> اطلق عام </div>
                 </div>
                 <div className="text-center">
-                  <AnimatedCounter target={50} />
+                  <AnimatedCounter target={30} />
                   <div className="text-gray-600">طبيب متخصص</div>
                 </div>
                 <div className="text-center">
-                  <AnimatedCounter target={1000} />
-                  <div className="text-gray-600">مريض سعيد</div>
+                  <AnimatedCounter target={250} />
+                  <div className="text-gray-600">استشاره طبيه </div>
                 </div>
                 <div className="text-center">
-                  <AnimatedCounter target={15} />
-                  <div className="text-gray-600">قسم طبي</div>
+                  <AnimatedCounter target={20} />
+                  <div className="text-gray-600"> اختصاص طبي</div>
                 </div>
               </div>
             </div>
@@ -247,7 +356,7 @@ export default function Home() {
       </div>
 
       {/* Emergency Contact */}
-      <div
+      {/* <div
         className="relative py-20"
         style={{
           backgroundImage: `url(${callBg})`,
@@ -266,56 +375,19 @@ export default function Home() {
             اتصل بنا الآن
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* Departments */}
       <div className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              أقسامنا الطبية
+              منصات الفريق
             </h2>
-            <p className="text-lg text-gray-600">
-              نقدم خدمات متخصصة في مختلف التخصصات الطبية
-            </p>
+            <p className="text-lg text-gray-600">يمكنك متابعتنا على منصاتنا </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className=" rounded-lg flex items-center justify-center mb-4">
-                <Icon
-                  color="fc4c55"
-                  icon="medical-icon:i-cardiology"
-                  width="50"
-                  height="50"
-                />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">قسم القلب</h3>
-              <p className="text-gray-600">علاج أمراض القلب والأوعية الدموية</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className=" rounded-lg flex items-center justify-center mb-4">
-                <Icon
-                  color="fc4c55"
-                  icon="fa6-solid:children"
-                  width="50"
-                  height="50"
-                />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">قسم طب الأطفال</h3>
-              <p className="text-gray-600">رعاية صحية متكاملة للأطفال</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="rounded-lg flex items-center justify-center mb-4">
-                <Icon
-                  color="fc4c55"
-                  icon="solar:bones-broken"
-                  width="50"
-                  height="50"
-                />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">قسم العظام</h3>
-              <p className="text-gray-600">علاج وإعادة تأهيل إصابات العظام</p>
-            </div>
+            {Departments}
           </div>
         </div>
       </div>

@@ -76,13 +76,10 @@ const Header = () => {
                 <ul className="  w-full flex   items-center justify-between">
                   <li className="px-2   ">
                     <a
-                      href="http//"
+                      href="tel:+963998942124"
                       className="items-center flex justify-between "
                     >
-                      <span className=" hidden md:block">
-                      +963 998 942 124
-
-                      </span>
+                      <span className=" hidden md:block">00963998942124</span>
                       <Icon
                         icon={"carbon:phone-filled"}
                         width={"20"}
@@ -92,12 +89,11 @@ const Header = () => {
                   </li>
                   <li className="px-2">
                     <a
-                      href="mailto:medlife056@gmail.com"
+                      href="mailto:mailto:medlife741@gmail.com"
                       className="text-decoration-none flex  items-center justify-between"
                     >
-                      <span  className=" hidden md:block">
-
-                      medlife056@gmail.com
+                      <span className=" hidden md:block">
+                        mailto:medlife741@gmail.com
                       </span>
                       <Icon
                         className="mx-1"
