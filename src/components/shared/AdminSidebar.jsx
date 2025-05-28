@@ -11,7 +11,7 @@ const AdminSidebar = () => {
     return storedState ? JSON.parse(storedState) : false;
   });
 
-  // 2. حفظ الحالة كلما تغيّرت
+
   useEffect(() => {
     localStorage.setItem("adminSidebarOpen", JSON.stringify(isOpen));
   }, [isOpen]);

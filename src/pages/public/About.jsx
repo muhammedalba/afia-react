@@ -213,19 +213,19 @@ const About = () => {
                   <Icon icon="mdi:account" className="text-lg text-bgColor" />
                   {dev.role}
                 </p>
-                <div className="flex items-center justify-center gap-x-2">
+                <div className="flex items-center justify-center gap-x-2 hover:scale-105">
                   <a className="" href={dev.socialMedia.whatsapp}>
                     <Icon
                       width="30"
                       icon="mdi:whatsapp"
-                      className="text-lg text-bgColor"
+                      className="text-lg hover:text-bgColor hover:scale-110 text-green-700"
                     />
                   </a>
                   <a className="" href={dev.socialMedia.linkedin}>
                     <Icon
                       width="30"
                       icon="mingcute:linkedin-fill"
-                      className="text-lg text-bgColor"
+                      className="text-lg hover:text-bgColor hover:scale-110 text-blue-800"
                     />
                   </a>
                 </div>
