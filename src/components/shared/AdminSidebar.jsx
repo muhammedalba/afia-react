@@ -8,7 +8,7 @@ const AdminSidebar = () => {
   // 1. استرجاع الحالة من localStorage (true / false)
   const [isOpen, setOpen] = useState(() => {
     const storedState = localStorage.getItem("adminSidebarOpen");
-    return storedState ? JSON.parse(storedState) : true;
+    return storedState ? JSON.parse(storedState) : false;
   });
 
   // 2. حفظ الحالة كلما تغيّرت
@@ -21,11 +21,12 @@ const AdminSidebar = () => {
   }, []);
 
   const navItems = useMemo(
-    () => [ {
-      title: "الملف الشخصي",
-      path: "/admin/profile",
-      icon: "mdi:account-circle-outline",
-    },
+    () => [
+      {
+        title: "الملف الشخصي",
+        path: "/admin/profile",
+        icon: "mdi:account-circle-outline",
+      },
       {
         title: "لوحة التحكم",
         path: "/admin/dashboard",
@@ -47,7 +48,6 @@ const AdminSidebar = () => {
         path: "/admin/donations",
         icon: "mdi:donation-outline",
       },
-     
     ],
     []
   );
@@ -63,7 +63,7 @@ const AdminSidebar = () => {
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}
-          className=" hidden sm:flex text-bgColor hover:text-pink-600 transition-colors relative w-full  justify-end"
+          className=" flex text-bgColor hover:text-pink-600 transition-colors relative w-full  justify-end"
         >
           <Icon icon="gravity-ui:bars-unaligned" width="28" height="28" />
         </button>
@@ -88,16 +88,11 @@ const AdminSidebar = () => {
                   height="24"
                   color={location.pathname === item.path ? "white" : "fc4c56"}
                 />
-                {/* نص العنصر */}
+
                 {isOpen && <span className="mr-3">{item.title}</span>}
               </Link>
 
-              {/* التولتيب - يظهر فقط عندما isOpen = false */}
-              {!isOpen && (
-                <span className="absolute right-12 top-1/2 -translate-y-1/2 bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap">
-                  {item.title}
-                </span>
-              )}
+              
             </li>
           ))}
         </ul>
