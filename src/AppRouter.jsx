@@ -30,6 +30,8 @@ import NotFound from "./pages/public/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer/Footer";
 
+
+
 // Component mapping
 const componentMap = {
   AdminLogin,
@@ -38,7 +40,6 @@ const componentMap = {
   AdminDoctors,
   AdminExaminations,
   AdminDonations,
-
   AdminProfile,
   PatientLogin,
   PatientRegister,
@@ -54,7 +55,6 @@ const componentMap = {
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { user } = useAuth();
-
   if (!user) {
     // Redirect to login if not authenticated
     return <Navigate to="/login" replace />;
@@ -69,8 +69,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 };
 
 const AppRouter = () => {
-  const { user } = useAuth();
 
+  // admin 
   const renderAdminRoute = (route) => {
     const Component = componentMap[route.element];
     if (!Component) {
@@ -144,17 +144,15 @@ const AppRouter = () => {
         v7_relativeSplatPath: true,
       }}
     >
+      {" "}
+      <Header />
       <Routes>
         {/* Public routes with header and footer */}
         <Route
           element={
-            <>
-              <Header />
-              <main>
-                <Outlet />
-              </main>
-              <Footer />
-            </>
+            <main>
+              <Outlet />
+            </main>
           }
         >
           {publicRoutes.map(renderPublicRoute)}
@@ -169,18 +167,13 @@ const AppRouter = () => {
           <Route
             element={
               <ProtectedRoute requiredRole="admin">
-                <AdminLayout>
-                  <Outlet />
-                </AdminLayout>
-              </ProtectedRoute>
+              <AdminLayout>
+                <Outlet />
+              </AdminLayout>
+             </ProtectedRoute>
             }
           >
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="doctors" element={<AdminDoctors />} />
-            <Route path="patients" element={<AdminPatients />} />
-            <Route path="examinations" element={<AdminExaminations />} />
-            <Route path="donations" element={<AdminDonations />} />
-            <Route path="profile" element={<AdminProfile />} />
+            {adminRoutes.map(renderAdminRoute)}
             {/* Redirect /admin to /admin/dashboard */}
             <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
@@ -192,6 +185,7 @@ const AppRouter = () => {
         {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };

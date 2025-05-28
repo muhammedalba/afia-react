@@ -141,13 +141,13 @@ export default function Home() {
       <Link
         key={i}
         to={e.link}
-        className="bg-white p-6 rounded-lg shadow-lg text-center hover:translate-y-2 transition-all"
+        className="bg-white p-6 rounded-lg hover:shadow-2xl shadow-lg text-center hover:scale-105 transition-all"
       >
-        <div className=" rounded-lg flex items-center justify-center mb-4">
-          <Icon color="fc4c55" icon={e.Icon} width="50" height="50" />
+        <div className=" hover:text-blue-800 hover:scale-105 text-bgColor rounded-lg flex items-center justify-center mb-4">
+          <Icon icon={e.Icon} width="50" height="50" />
         </div>
-        <h3 className="text-xl font-semibold mb-2 hover:text-bgColor"> {e.title}</h3>
-        <p className="text-gray-600">{e.description}</p>
+        <h3 className="text-xl hover:scale-105 font-semibold mb-2 hover:text-bgColor"> {e.title}</h3>
+        <p className="text-gray-600 hover:scale-105 hover:text-gray-800">{e.description}</p>
       </Link>
     );
   });

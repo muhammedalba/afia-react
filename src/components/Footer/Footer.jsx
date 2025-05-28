@@ -76,15 +76,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">تواصل معنا</h3>
             <ul className="space-y-2">
-              <li>
+              <li className="hover:text-gray-900 text-white">
                 <a
                   href="https://medlife.hurufy.com/"
                   className="flex items-center justify-start gap-x-2"
                 >
                   <span>
-                    {" "}
                     <Icon
-                      color="white"
                       icon="icon-park-outline:earth"
                       width="25"
                       height="25"
@@ -93,37 +91,26 @@ const Footer = () => {
                   medlife.hurufy.com{" "}
                 </a>{" "}
               </li>
-
-              <li>
+              <li className="hover:text-gray-900 text-white">
                 <a
                   href="mailto:medlife056@gmail.com"
                   className="flex items-center justify-start gap-x-2"
                 >
                   <span>
                     {" "}
-                    <Icon
-                      color="white"
-                      icon="iconamoon:email-thin"
-                      width="25"
-                      height="25"
-                    />
+                    <Icon icon="iconamoon:email-thin" width="25" height="25" />
                   </span>
                   medlife056@gmail.com
                 </a>{" "}
               </li>
-              <li>
+              <li className="hover:text-gray-900 text-white">
                 <a
                   href="tel:+963998942124"
                   className="flex items-center justify-start gap-x-2"
                 >
                   <span>
                     {" "}
-                    <Icon
-                      color="white"
-                      icon="iconamoon:phone-thin"
-                      width="25"
-                      height="25"
-                    />
+                    <Icon icon="iconamoon:phone-thin" width="25" height="25" />
                   </span>
                   0963998942124
                 </a>{" "}

@@ -12,13 +12,26 @@ import {
 import logo from "../assets/AfiaLogo.png";
 import { Icon } from "@iconify/react";
 
+import { useCreateResourceMutation } from "../redux/features/api/apiSlice";
+
 const Header = () => {
+  const [createResource, { data, error, isLoading, isSuccess }] =
+    useCreateResourceMutation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  useEffect(() => {
+    if (isSuccess && data.Status == 200) {
+      logout();
+      navigate("/login");
+    }
+  }, [data, isSuccess]);
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate("/login");
+      await createResource({
+        url: "/Logout",
+        body: "",
+        method: "POST",
+      });
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -79,7 +92,7 @@ const Header = () => {
                       href="tel:+963998942124"
                       className="items-center flex justify-between "
                     >
-                      <span className=" hidden md:block">00963998942124</span>
+                      <span className=" hidden md:block">963998942124+</span>
                       <Icon
                         icon={"carbon:phone-filled"}
                         width={"20"}

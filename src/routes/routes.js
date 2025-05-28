@@ -36,11 +36,12 @@ export const adminRoutes = [
     role: "admin",
   },
   {
-    path: "/admin/statistics",
-    element: "AdminStatistics",
+    path: "/admin/profile",
+    element: "AdminProfile",
     isPublic: false,
     role: "admin",
   },
+
 ];
 
 // Patient Routes
@@ -100,4 +101,5 @@ export const publicRoutes = [
 ];
 
 // Combine all routes
-export const allRoutes = [...adminRoutes, ...patientRoutes, ...publicRoutes];
+// export const allRoutes = [...adminRoutes, ...patientRoutes, ...publicRoutes];
+// 

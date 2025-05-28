@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Icon } from "@iconify/react";
-import logo from "../../assets/a1-removebg-preview.png";
+import logo from "../../assets/AfiaLogo.png";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -34,7 +34,7 @@ const PatientLogin = () => {
   // const decodedName = decodeURIComponent(rawName);name20%last => name last name
   const navigate = useNavigate();
   const cookies = new Cookies();
-  console.log(data?.Message);
+
 
   const { login } = useAuth();
   // 2. handel useForm مع yupResolver
@@ -89,14 +89,17 @@ const PatientLogin = () => {
       {isLoading && <Preloader />}
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-3 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
-          <img
-            src={logo}
-            alt="logo"
-            width="200"
-            height="auto"
-            loading="lazy"
-            className="m-auto"
-          />
+          <Link to={"/"}>
+            <img
+              src={logo}
+              alt="logo"
+              width="150"
+              height="auto"
+              loading="lazy"
+              className="m-auto hover:scale-105 transition"
+            />
+          </Link>
+
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               تسجيل دخول المريض
