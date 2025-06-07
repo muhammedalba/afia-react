@@ -38,6 +38,7 @@ const AdminDonations = () => {
       isSuccess: successApprove,
     },
   ] = useApproveDonationMutation();
+console.log(errorApprove);
 
   useEffect(() => {
     if (successApprove) {
@@ -54,7 +55,7 @@ const AdminDonations = () => {
     try {
       console.log(donationId);
       
-      await approveDonation(`/Cancel_doantion/${donationId}`).unwrap();
+      await approveDonation(`/Cancel_donation/${donationId}`).unwrap();
     } catch (err) {
       console.error("Failed to delete donation:", err);
     }

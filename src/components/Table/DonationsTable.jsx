@@ -79,9 +79,9 @@ const AdminDonationsTable = ({
                         )}
                       </Button>
                     }
-                    title="تأكيد الإجراء"
+                    title=" قبول الطلب"
                     className="bg-red-600 text-white hover:bg-red-700"
-                    description="هل أنت متأكد من تغير الحالة ؟ لا يمكن التراجع عن هذا الإجراء."
+                    description="هل أنت متأكد من قبول الطلب ؟ لا يمكن التراجع عن هذا الإجراء."
                     onConfirm={() => Approve_donation(donation.id)}
                   />
                 )}

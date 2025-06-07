@@ -60,7 +60,7 @@ const AdminDoctors = () => {
 
   const [approveDoctor, { isLoading: LoadingApprove }] =
     useCreateResourceMutation();
-console.log(errorDelete);
+  console.log(errorDelete);
 
   // handel  delete doctor msg
   useEffect(() => {
@@ -73,7 +73,6 @@ console.log(errorDelete);
       errorNotify(" حدثة مشكلة اثناء  حذف الطبيب");
     }
   }, [errorDelete]);
-
 
   const handleApproveDoctor = useCallback(
     async (doctorId) => {
@@ -92,15 +91,13 @@ console.log(errorDelete);
 
   const handleDeleteDoctor = useCallback(
     async (doctorId) => {
-      if(doctorId){
+      if (doctorId) {
         try {
-        
-        await deleteDoctor(`/Delete_doctor/${doctorId}`).unwrap();
-      } catch (err) {
-        console.error("Failed to delete doctor:", err);
+          await deleteDoctor(`/Delete_doctor/${doctorId}`).unwrap();
+        } catch (err) {
+          console.error("Failed to delete doctor:", err);
+        }
       }
-      }
-      
     },
     [deleteDoctor]
   );
@@ -216,7 +213,7 @@ console.log(errorDelete);
                               <ConfirmDialog
                                 trigger={
                                   <Button
-                                    disabled={LoadingApprove}
+                                    disabled={LoadingApprove || LoadingDelete}
                                     variant="ghost"
                                     className="bg-indigo-500 hover:text-white text-white hover:bg-indigo-600 ml-4"
                                   >
@@ -234,6 +231,7 @@ console.log(errorDelete);
                                   </Button>
                                 }
                                 title="تأكيد الموافقة"
+                                className="bg-red-600 text-white hover:bg-red-700"
                                 description="هل أنت متأكد من الموافقة على هذا الطبيب؟"
                                 onConfirm={() => handleApproveDoctor(doctor.id)}
                               />
