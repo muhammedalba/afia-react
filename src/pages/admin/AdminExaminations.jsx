@@ -13,6 +13,8 @@ import { useDebounce } from "use-debounce";
 import { Icon } from "@iconify/react";
 // import ExaminationTable from "./ExaminationTable";
 import AdminExaminationsTable from "../../components/Table/Table";
+import { errorNotify, successNotify } from "../../utils/Toast";
+import { ToastContainer } from "react-toastify";
 
 const AdminExaminations = () => {
   useEffect(() => {
@@ -30,12 +32,23 @@ const AdminExaminations = () => {
 
   const [
     deletePatient,
-    { isLoading: LoadingDelete },
+    { isLoading: LoadingDelete, isSuccess: success_delete, error: errorDelete },
   ] = useDeleteResourceMutation();
+
+  useEffect(() => {
+    if (success_delete) {
+      successNotify("تم حذف الفحص بنجاح");
+    }
+  }, [success_delete]);
+  useEffect(() => {
+    if (errorDelete) {
+      errorNotify(" حدثة مشكلة اثناء  حذف ");
+    }
+  }, [errorDelete]);
 
   const handleDeleteExamination = async (examinationId) => {
     try {
-      await deletePatient(examinationId).unwrap();
+      await deletePatient(`/delete_examination/${examinationId}`).unwrap();
     } catch (err) {
       console.error("Failed to delete examination:", err);
     }
@@ -52,6 +65,7 @@ const AdminExaminations = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة الفحوصات</h1>
         <form onSubmit={handleSearch} className="flex gap-2 items-center">
@@ -97,7 +111,7 @@ const AdminExaminations = () => {
             examinations={data?.Data?.data || []}
             isLoading={isLoading}
             LoadingDelete={LoadingDelete}
-            handleDeleteExamination={handleDeleteExamination}
+            onDelete={handleDeleteExamination}
           />
 
           {!searchTerm && data?.Data && (

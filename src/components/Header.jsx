@@ -123,7 +123,7 @@ const Header = () => {
         </div>
         {/* nav bar */}
         <div className="bg-minColor text-textColor border  mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="container ">
+          <div className=" ">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 {user?.role ? (
@@ -172,7 +172,7 @@ const Header = () => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <span className="text-textColor">
+                    <span className="text-textColor hidden sm:block">
                       مرحباً، <span>{user?.full_name || user?.email}</span>
                     </span>
                     <Link to="/" className="flex items-center">

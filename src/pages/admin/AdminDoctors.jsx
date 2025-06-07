@@ -6,7 +6,7 @@ import React, {
   lazy,
   Suspense,
 } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+
 import {
   useGetAllResourcesQuery,
   useDeleteResourceMutation,
@@ -18,8 +18,10 @@ import { Search } from "lucide-react";
 import { pageTitle } from "../../helper";
 import { useDebounce } from "use-debounce";
 import { Icon } from "@iconify/react";
+import { successNotify, errorNotify } from "../../utils/Toast";
+import { ToastContainer } from "react-toastify";
 
-// 🐢 Lazy-loaded Components
+//  Lazy-loaded Components
 const ConfirmDialog = lazy(() =>
   import("../../components/ConfirmDialog/ConfirmDialog")
 );
@@ -51,11 +53,27 @@ const AdminDoctors = () => {
       : `/Display_doctors?page=${currentPage}`
   );
 
-  const [deleteDoctor, { isLoading: LoadingDelete }] =
-    useDeleteResourceMutation();
+  const [
+    deleteDoctor,
+    { isLoading: LoadingDelete, isSuccess: success_delete, error: errorDelete },
+  ] = useDeleteResourceMutation();
 
   const [approveDoctor, { isLoading: LoadingApprove }] =
     useCreateResourceMutation();
+console.log(errorDelete);
+
+  // handel  delete doctor msg
+  useEffect(() => {
+    if (success_delete) {
+      successNotify("تم حذف الطبيب بنجاح");
+    }
+  }, [success_delete]);
+  useEffect(() => {
+    if (errorDelete) {
+      errorNotify(" حدثة مشكلة اثناء  حذف الطبيب");
+    }
+  }, [errorDelete]);
+
 
   const handleApproveDoctor = useCallback(
     async (doctorId) => {
@@ -74,11 +92,15 @@ const AdminDoctors = () => {
 
   const handleDeleteDoctor = useCallback(
     async (doctorId) => {
-      try {
-        await deleteDoctor(`/Delete_doctor/${doctorId}`);
+      if(doctorId){
+        try {
+        
+        await deleteDoctor(`/Delete_doctor/${doctorId}`).unwrap();
       } catch (err) {
         console.error("Failed to delete doctor:", err);
       }
+      }
+      
     },
     [deleteDoctor]
   );
@@ -96,6 +118,7 @@ const AdminDoctors = () => {
 
   return (
     <div className="w-full  mx-auto px-4 py-8">
+      <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة الأطباء</h1>
         <form onSubmit={handleSearch} className="flex gap-2 items-center">
@@ -239,6 +262,7 @@ const AdminDoctors = () => {
                               </Button>
                             }
                             title="تأكيد الحذف"
+                            className="bg-red-600 text-white hover:bg-red-700"
                             description="هل أنت متأكد من حذف هذا الطبيب؟ لا يمكن التراجع عن هذا الإجراء."
                             onConfirm={() => handleDeleteDoctor(doctor.id)}
                           />

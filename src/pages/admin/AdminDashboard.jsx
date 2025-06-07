@@ -39,7 +39,7 @@ const AdminDashboard = () => {
       key={n}
       title={` ( ${data?.blood_type?.toString()} ) نوع  زمرة الدم  `}
       value={data?.count}
-      link="/admin/doctors"
+      link="/admin/donations"
       color="hover:bg-blue-50"
       icon={"healthicons:blood-bag-24px"}
     />

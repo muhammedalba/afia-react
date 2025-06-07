@@ -59,7 +59,7 @@ const AdminSidebar = () => {
         transition-all duration-300 text-nowrap w-auto
       `}
     >
-      <div className="p-3 space-y-4 sticky top-20 right-0">
+      <div className="p-3 space-y-4 sticky top-28 pb-10 right-0">
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}

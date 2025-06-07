@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useGetAllResourcesQuery,
   useDeleteResourceMutation,
+  useApproveDonationMutation,
 } from "../../redux/features/api/apiSlice";
 import Preloader from "../../components/Preloader/Preloader";
 import { Input } from "../../components/ui/input";
@@ -11,7 +12,9 @@ import { pageTitle } from "../../helper";
 import CustomPagination from "../../components/Pagination/CustomPagination";
 import { useDebounce } from "use-debounce";
 import { Icon } from "@iconify/react";
-import AdminDonationsTable from "../../components/Table/Table";
+import AdminDonationsTable from "../../components/Table/DonationsTable";
+import { errorNotify, successNotify } from "../../utils/Toast";
+import { ToastContainer } from "react-toastify";
 
 const AdminDonations = () => {
   useEffect(() => {
@@ -24,17 +27,44 @@ const AdminDonations = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, error } = useGetAllResourcesQuery(
-    `/Display_all_donations?page=${currentPage}&search=${debouncedSearchTerm}`
+    `/admin/Display_all_donations?page=${currentPage}`
   );
 
-  const [deleteDonation, { isLoading: LoadingDelete }] =
-    useDeleteResourceMutation();
+  const [
+    approveDonation,
+    {
+      isLoading: LoadingApprove,
+      error: errorApprove,
+      isSuccess: successApprove,
+    },
+  ] = useApproveDonationMutation();
 
-  const handleDeleteDonation = async (donationId) => {
+  useEffect(() => {
+    if (successApprove) {
+      successNotify("تم  تعديل الحالة بنجاح");
+    }
+  }, [successApprove]);
+  useEffect(() => {
+    if (errorApprove) {
+     errorNotify(" حدثة مشكلة اثناء التعديل");
+    }
+  }, [errorApprove]);
+
+  const handleCancelDonation = async (donationId) => {
     try {
-      await deleteDonation(donationId).unwrap();
+      console.log(donationId);
+      
+      await approveDonation(`/Cancel_doantion/${donationId}`).unwrap();
     } catch (err) {
       console.error("Failed to delete donation:", err);
+    }
+  };
+
+  const handleApproveDonation = async (donationId) => {
+    try {
+      await approveDonation(`/Approve_donation/${donationId}`).unwrap();
+    } catch (err) {
+      console.error("Failed to approve donation:", err);
     }
   };
 
@@ -49,6 +79,7 @@ const AdminDonations = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة التبرعات</h1>
         <form onSubmit={handleSearch} className="flex gap-2 items-center">
@@ -93,8 +124,9 @@ const AdminDonations = () => {
           <AdminDonationsTable
             donations={data?.Data?.data || []}
             isLoading={isLoading}
-            LoadingDelete={LoadingDelete}
-            handleDeleteDonation={handleDeleteDonation}
+            LoadingApprove={LoadingApprove}
+            Approve_donation={handleApproveDonation}
+            onDelete={handleCancelDonation}
           />
 
           {!searchTerm && data?.Data && (

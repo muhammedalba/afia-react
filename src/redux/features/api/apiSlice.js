@@ -45,6 +45,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["data"],
     }),
 
+    approveDonation: builder.mutation({
+      query: ( url ) => ({
+        url,
+        method: "PATCH"
+      }),
+      invalidatesTags: ["data"],
+    }),
+
     deleteResource: builder.mutation({
       query: (url) => ({
         url,
@@ -59,8 +67,9 @@ export const {
   useCreateResourceMutation,
   useGetAllResourcesQuery,
   useGetResourceByIdQuery,
-  useUpdateResourceMutation,
   useDeleteResourceMutation,
+  useUpdateResourceMutation,
+  useApproveDonationMutation
 } = apiSlice;
 
 // import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";

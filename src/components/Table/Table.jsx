@@ -8,8 +8,10 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import { Icon } from "@iconify/react";
 
-const AdminExaminationsTable = ({ examinations, onDelete }) => {
+const AdminExaminationsTable = ({ examinations, onDelete, LoadingDelete }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedDetails, setSelectedDetails] = useState(null);
 
@@ -29,13 +31,12 @@ const AdminExaminationsTable = ({ examinations, onDelete }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {examinations.map((exam) => (
+          {examinations?.map((exam) => (
             <tr key={exam.id}>
               <td className="px-6 py-4 whitespace-nowrap text-right">
                 {exam.patient?.full_name || "-"}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
-              
                 {exam.description_of_status ? (
                   <Dialog>
                     <DialogTrigger asChild>
@@ -67,7 +68,6 @@ const AdminExaminationsTable = ({ examinations, onDelete }) => {
                 {exam.time || "-"}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right">
-           
                 {exam.medications_taken ? (
                   <Dialog>
                     <DialogTrigger asChild>
@@ -208,14 +208,34 @@ const AdminExaminationsTable = ({ examinations, onDelete }) => {
               </td>
 
               {/* عمود حذف */}
+
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => onDelete && onDelete(exam.id)}
-                >
-                  حذف
-                </Button>
+                <ConfirmDialog
+                  trigger={
+                    <Button
+                      disabled={LoadingDelete}
+                      variant="ghost"
+                      className="bg-bgColor hover:bg-red-700 text-white hover:text-white"
+                    >
+                      {LoadingDelete ? (
+                        <Icon
+                          icon="eos-icons:loading"
+                          width="75"
+                          height="75"
+                          color="white"
+                          className="bg-bgColor rounded-md"
+                        />
+                      ) : (
+                        "حذف"
+                      )}
+                    </Button>
+                  }
+                  title="تأكيد الحذف"
+                  className="bg-red-600 text-white hover:bg-red-700"
+                  description="هل أنت متأكد من حذف ؟ لا يمكن التراجع عن هذا الإجراء."
+                  onConfirm={() => onDelete && onDelete(exam.id)}
+                />
+              
               </td>
             </tr>
           ))}

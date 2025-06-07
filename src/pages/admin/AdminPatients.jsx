@@ -10,10 +10,12 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Search } from "lucide-react";
 import { pageTitle } from "../../helper";
-import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import CustomPagination from "../../components/Pagination/CustomPagination";
 import { useDebounce } from "use-debounce";
 import { Icon } from "@iconify/react";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
+import { errorNotify, successNotify } from "../../utils/Toast";
+import { ToastContainer } from "react-toastify";
 
 const AdminPatients = () => {
   useEffect(() => {
@@ -33,18 +35,45 @@ const AdminPatients = () => {
   } = useGetAllResourcesQuery(
     searchTerm
       ? `/Search_for_patient/${debouncedSearchTerm}`
-      : `/Display_patients?page=${1}`
+      : `/Display_patients?page=${currentPage}`
   );
-
 
   const [
     deletePatient,
-    { data: dataDelete, error: errorDelete, isLoading: LoadingDelete },
+    {
+      error: errorDelete,
+      isLoading: LoadingDelete,
+      isSuccess: successDelete,
+    },
   ] = useDeleteResourceMutation();
   const [
     approvePatient,
-    { data: dataApprove, error: errorApprove, isLoading: LoadingApprove },
+    {
+      error: errorApprove,
+      isLoading: LoadingApprove,
+      isSuccess,
+    },
   ] = useCreateResourceMutation();
+
+  // handel  delete doctor msg
+  useEffect(() => {
+    if ( successDelete) {
+      successNotify("تم حذف  بنجاح");
+    }
+   
+  }, [successDelete]);
+  useEffect(() => {
+   
+    if(isSuccess){
+      successNotify("تم تعديل  بنجاح");
+
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    if (errorApprove || errorDelete) {
+      errorNotify(" حدثة مشكلة اثناء  الاجراء ");
+    }
+  }, [errorApprove, errorDelete]);
 
   const handleApprovePatient = async (patientId) => {
     try {
@@ -60,9 +89,8 @@ const AdminPatients = () => {
 
   const handleDeletePatient = async (patientId) => {
     try {
-      console.log(patientId, "id");
-
       await deletePatient(`/Delete_patient/${patientId}`);
+      console.log(patientId);
     } catch (err) {
       console.error("Failed to delete patient:", err);
     }
@@ -81,6 +109,7 @@ const AdminPatients = () => {
 
   return (
     <div className=" mx-auto ">
+      <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة المرضى</h1>
         <form onSubmit={handleSearch} className="flex gap-2 items-center">
@@ -185,7 +214,7 @@ const AdminPatients = () => {
                                   )}
                                 </Button>
                               }
-                              className="bg-green-600 hover:bg-green-800"
+                              className="bg-bgColor hover:bg-red-800"
                               title="تأكيد الموافقة"
                               description="هل أنت متأكد من الموافقة على هذا المريض؟"
                               onConfirm={() => handleApprovePatient(patient.id)}
