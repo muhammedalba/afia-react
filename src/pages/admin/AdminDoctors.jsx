@@ -20,8 +20,8 @@ import { useDebounce } from "use-debounce";
 import { Icon } from "@iconify/react";
 import { successNotify, errorNotify } from "../../utils/Toast";
 import { ToastContainer } from "react-toastify";
+import { motion } from "framer-motion";
 
-//  Lazy-loaded Components
 const ConfirmDialog = lazy(() =>
   import("../../components/ConfirmDialog/ConfirmDialog")
 );
@@ -60,18 +60,13 @@ const AdminDoctors = () => {
 
   const [approveDoctor, { isLoading: LoadingApprove }] =
     useCreateResourceMutation();
-  console.log(errorDelete);
 
-  // handel  delete doctor msg
   useEffect(() => {
-    if (success_delete) {
-      successNotify("تم حذف الطبيب بنجاح");
-    }
+    if (success_delete) successNotify("تم حذف الطبيب بنجاح");
   }, [success_delete]);
+
   useEffect(() => {
-    if (errorDelete) {
-      errorNotify(" حدثة مشكلة اثناء  حذف الطبيب");
-    }
+    if (errorDelete) errorNotify(" حدثة مشكلة اثناء  حذف الطبيب");
   }, [errorDelete]);
 
   const handleApproveDoctor = useCallback(
@@ -114,7 +109,8 @@ const AdminDoctors = () => {
   const doctors = useMemo(() => response?.Data?.data || [], [response]);
 
   return (
-    <div className="w-full  mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8">
+      {LoadingApprove || (LoadingDelete && <Preloader />)}
       <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة الأطباء</h1>
@@ -129,19 +125,25 @@ const AdminDoctors = () => {
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           </div>
-          {isLoading ? (
-            <Icon
-              icon="eos-icons:three-dots-loading"
-              width="50"
-              height="40"
-              color="white"
-              className="bg-bgColor rounded-md"
-            />
-          ) : (
-            <Button className="bg-bgColor hover:bg-red-700" type="submit">
-              بحث
-            </Button>
-          )}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {isLoading ? (
+              <Icon
+                icon="eos-icons:three-dots-loading"
+                width="50"
+                height="40"
+                color="white"
+                className="bg-bgColor rounded-md"
+              />
+            ) : (
+              <Button className="bg-bgColor hover:bg-red-700" type="submit">
+                بحث
+              </Button>
+            )}
+          </motion.div>
         </form>
       </div>
 
@@ -153,12 +155,21 @@ const AdminDoctors = () => {
         ) : error ? (
           <div className="text-red-500 p-4 text-center">{error.message}</div>
         ) : doctors.length === 0 ? (
-          <div className="text-center p-8 text-gray-600 text-lg">
+          <motion.div
+            className="text-center p-8 text-gray-600 text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             لا يوجد طبيب بهذا الاسم
-          </div>
+          </motion.div>
         ) : (
           <>
-            <div className="bg-white rounded-lg shadow overflow-hidden w-full">
+            <motion.div
+              className="bg-white rounded-lg shadow overflow-hidden w-full"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="overflow-x-auto w-full">
                 <table className="min-w-max divide-y divide-gray-200 w-full">
                   <thead className="bg-gray-200 text-textColor text-right text-xs font-medium tracking-wider uppercase">
@@ -169,12 +180,22 @@ const AdminDoctors = () => {
                       <th className="px-6 py-3">المدينة</th>
                       <th className="px-6 py-3">العنوان</th>
                       <th className="px-6 py-3">الحالة</th>
-                      <th className="px-6 py-3">حذف</th>
+                      <th className="px-6 py-3">تغيير الحالة</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {doctors.map((doctor) => (
-                      <tr key={doctor.id}>
+                    {doctors.map((doctor, index) => (
+                      <motion.tr
+                        key={doctor.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        whileHover={{
+                          scale: 1.01,
+                          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                        }}
+                        style={{ originX: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.05 }}
+                      >
                         <td className="px-6 py-4 text-right">
                           {doctor.full_name}
                         </td>
@@ -195,7 +216,6 @@ const AdminDoctors = () => {
                             عرض العنوان
                           </Button>
                         </td>
-
                         <td className="px-6 py-4 text-right">
                           <span
                             className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -208,69 +228,49 @@ const AdminDoctors = () => {
                               ? "تم الموافقة"
                               : "قيد الانتظار"}
                           </span>
-                          {!doctor.is_approved && (
-                            <span className="block mt-2">
-                              <ConfirmDialog
-                                trigger={
-                                  <Button
-                                    disabled={LoadingApprove || LoadingDelete}
-                                    variant="ghost"
-                                    className="bg-indigo-500 hover:text-white text-white hover:bg-indigo-600 ml-4"
-                                  >
-                                    {LoadingApprove ? (
-                                      <Icon
-                                        icon="eos-icons:loading"
-                                        width="200"
-                                        height="75"
-                                        color="white"
-                                        className="rounded-md"
-                                      />
-                                    ) : (
-                                      "موافقة"
-                                    )}
-                                  </Button>
-                                }
-                                title="تأكيد الموافقة"
-                                className="bg-red-600 text-white hover:bg-red-700"
-                                description="هل أنت متأكد من الموافقة على هذا الطبيب؟"
-                                onConfirm={() => handleApproveDoctor(doctor.id)}
-                              />
-                            </span>
-                          )}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <ConfirmDialog
-                            trigger={
-                              <Button
-                                disabled={LoadingDelete}
-                                variant="ghost"
-                                className="bg-bgColor hover:bg-red-700 text-white hover:text-white"
-                              >
-                                {LoadingDelete ? (
-                                  <Icon
-                                    icon="eos-icons:loading"
-                                    width="75"
-                                    height="75"
-                                    color="white"
-                                    className="bg-bgColor rounded-md"
-                                  />
-                                ) : (
-                                  "حذف"
-                                )}
-                              </Button>
-                            }
-                            title="تأكيد الحذف"
-                            className="bg-red-600 text-white hover:bg-red-700"
-                            description="هل أنت متأكد من حذف هذا الطبيب؟ لا يمكن التراجع عن هذا الإجراء."
-                            onConfirm={() => handleDeleteDoctor(doctor.id)}
-                          />
+                          {doctor.is_approved ? (
+                            <ConfirmDialog
+                              trigger={
+                                <Button
+                                  disabled={LoadingDelete}
+                                  variant="ghost"
+                                  className="bg-bgColor hover:bg-red-700 text-white hover:text-white"
+                                >
+                                  تجميد
+                                </Button>
+                              }
+                              title="تأكيد الحذف"
+                              className="bg-red-600 text-white hover:bg-red-700"
+                              description="هل أنت متأكد من تجميد عضوية هذا الطبيب؟ لا يمكن التراجع عن هذا الإجراء."
+                              onConfirm={() => handleDeleteDoctor(doctor.id)}
+                            />
+                          ) : (
+                            <ConfirmDialog
+                              trigger={
+                                <Button
+                                  disabled={LoadingApprove || LoadingDelete}
+                                  variant="ghost"
+                                  className="bg-green-600 hover:text-white text-white hover:bg-green-700 ml-4"
+                                >
+                                  موافقة
+                                </Button>
+                              }
+                              title="تأكيد الموافقة"
+                              className="bg-red-600 text-white hover:bg-red-700"
+                              description="هل أنت متأكد من الموافقة على هذا الطبيب؟"
+                              onConfirm={() => handleApproveDoctor(doctor.id)}
+                            />
+                          )}
                         </td>
-                      </tr>
+                      </motion.tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-            </div>
+            </motion.div>
+
             {showAddressModal && (
               <Suspense
                 fallback={

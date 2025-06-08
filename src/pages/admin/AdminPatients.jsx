@@ -16,6 +16,7 @@ import { Icon } from "@iconify/react";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import { errorNotify, successNotify } from "../../utils/Toast";
 import { ToastContainer } from "react-toastify";
+import { motion } from "framer-motion";
 
 const AdminPatients = () => {
   useEffect(() => {
@@ -23,9 +24,8 @@ const AdminPatients = () => {
     pageTitle("لوحة التحكم");
   }, []);
 
-  //
-  const [debouncedSearchTerm] = useDebounce("s", 500);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
@@ -40,35 +40,26 @@ const AdminPatients = () => {
 
   const [
     deletePatient,
-    {
-      error: errorDelete,
-      isLoading: LoadingDelete,
-      isSuccess: successDelete,
-    },
+    { error: errorDelete, isLoading: LoadingDelete, isSuccess: successDelete },
   ] = useDeleteResourceMutation();
+
   const [
     approvePatient,
-    {
-      error: errorApprove,
-      isLoading: LoadingApprove,
-      isSuccess,
-    },
+    { error: errorApprove, isLoading: LoadingApprove, isSuccess },
   ] = useCreateResourceMutation();
 
-  // handel  delete doctor msg
   useEffect(() => {
-    if ( successDelete) {
+    if (successDelete) {
       successNotify("تم حذف  بنجاح");
     }
-   
   }, [successDelete]);
-  useEffect(() => {
-   
-    if(isSuccess){
-      successNotify("تم تعديل  بنجاح");
 
+  useEffect(() => {
+    if (isSuccess) {
+      successNotify("تم تعديل  بنجاح");
     }
   }, [isSuccess]);
+
   useEffect(() => {
     if (errorApprove || errorDelete) {
       errorNotify(" حدثة مشكلة اثناء  الاجراء ");
@@ -98,7 +89,7 @@ const AdminPatients = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const handlePageChange = (pageNumber) => {
@@ -108,7 +99,7 @@ const AdminPatients = () => {
   const patients = response?.Data?.data || [];
 
   return (
-    <div className=" mx-auto ">
+    <div className="mx-auto">
       <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة المرضى</h1>
@@ -119,8 +110,7 @@ const AdminPatients = () => {
               placeholder="ابحث عن مريض بالاسم أو رقم الهاتف أو الرقم القومي..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 ring-1 bg-white focus-visible:ring-bgColor
- text-right"
+              className="pl-10 ring-1 bg-white focus-visible:ring-bgColor text-right"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           </div>
@@ -155,19 +145,33 @@ const AdminPatients = () => {
           <div className="bg-white rounded-lg shadow overflow-hidden w-full">
             <div className="overflow-x-auto w-full">
               <table className="min-w-max divide-y divide-gray-200 w-full">
-                <thead className="bg-gray-200 text-textColor text-right text-xs font-medium   tracking-wider uppercase">
+                <thead className="bg-gray-200 text-textColor text-right text-xs font-medium tracking-wider uppercase">
                   <tr>
-                    <th className="px-6 py-3 ">الاسم</th>
-                    <th className="px-6 py-3 ">رقم الهاتف</th>
-                    <th className="px-6 py-3 ">الرقم الوطني</th>
-                    <th className="px-6 py-3 ">الحالة الاجتماعية</th>
-                    <th className="px-6 py-3 ">الحالة</th>
-                    <th className="px-6 py-3 ">حذف</th>
+                    <th className="px-6 py-3">الاسم</th>
+                    <th className="px-6 py-3">رقم الهاتف</th>
+                    <th className="px-6 py-3">الرقم الوطني</th>
+                    <th className="px-6 py-3">الحالة الاجتماعية</th>
+                    <th className="px-6 py-3">الحالة</th>
+                    <th className="px-6 py-3">تغيير الحالة</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {patients.map((patient) => (
-                    <tr key={patient.id}>
+                  {patients.map((patient, index) => (
+                    <motion.tr
+                      key={patient.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: index * 0.1,
+                        // type: "spring",
+                        stiffness: 100,
+                      }}
+                      whileHover={{
+                        scale: 1.01,
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                      }}
+                      style={{ originX: 0 }}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-right">
                         {patient.full_name}
                       </td>
@@ -190,75 +194,73 @@ const AdminPatients = () => {
                         >
                           {patient.is_approved ? "تم الموافقة" : "قيد الانتظار"}
                         </span>
-                        <span className="block mt-2">
-                          {!patient.is_approved && (
-                            <ConfirmDialog
-                              trigger={
-                                <Button
-                                  disabled={
-                                    isLoading || LoadingDelete || LoadingApprove
-                                  }
-                                  variant="ghost"
-                                  className="bg-indigo-500 hover:text-white text-white hover:bg-indigo-600 ml-4"
-                                >
-                                  {LoadingApprove ? (
-                                    <Icon
-                                      icon="eos-icons:loading"
-                                      width="200"
-                                      height="75"
-                                      color="white"
-                                      className=" rounded-md"
-                                    />
-                                  ) : (
-                                    "موافقة"
-                                  )}
-                                </Button>
-                              }
-                              className="bg-bgColor hover:bg-red-800"
-                              title="تأكيد الموافقة"
-                              description="هل أنت متأكد من الموافقة على هذا المريض؟"
-                              onConfirm={() => handleApprovePatient(patient.id)}
-                            />
-                          )}
-                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
-                        <ConfirmDialog
-                          trigger={
-                            <Button
-                              disabled={
-                                isLoading || LoadingDelete || LoadingApprove
-                              }
-                              variant="ghost"
-                              className="bg-bgColor  hover:bg-red-700 text-white   hover:text-white"
-                            >
-                              {LoadingDelete ? (
-                                <Icon
-                                  icon="eos-icons:loading"
-                                  width="75"
-                                  height="75"
-                                  color="white"
-                                  className="bg-bgColor rounded-md"
-                                />
-                              ) : (
-                                "حذف"
-                              )}
-                            </Button>
-                          }
-                          title="تأكيد الحذف"
-                          className="bg-red-600 text-white hover:bg-red-700"
-                          description="هل أنت متأكد من حذف هذا المريض؟ لا يمكن التراجع عن هذا الإجراء."
-                          onConfirm={() => handleDeletePatient(patient.id)}
-                        />
+                        {patient.is_approved ? (
+                          <ConfirmDialog
+                            trigger={
+                              <Button
+                                disabled={
+                                  isLoading || LoadingDelete || LoadingApprove
+                                }
+                                variant="ghost"
+                                className="bg-bgColor hover:bg-red-700 text-white hover:text-white"
+                              >
+                                {LoadingDelete ? (
+                                  <Icon
+                                    icon="eos-icons:loading"
+                                    width="75"
+                                    height="75"
+                                    color="white"
+                                    className="bg-bgColor rounded-md"
+                                  />
+                                ) : (
+                                  "حذف"
+                                )}
+                              </Button>
+                            }
+                            title="تأكيد التجميد"
+                            className="bg-red-600 text-white hover:bg-red-700"
+                            description="هل أنت متأكد من تجميد هذا المريض؟ لا يمكن التراجع عن هذا الإجراء."
+                            onConfirm={() => handleDeletePatient(patient.id)}
+                          />
+                        ) : (
+                          <ConfirmDialog
+                            trigger={
+                              <Button
+                                disabled={
+                                  isLoading || LoadingDelete || LoadingApprove
+                                }
+                                variant="ghost"
+                                className="bg-green-600 hover:text-white text-white hover:bg-green-700 ml-4"
+                              >
+                                {LoadingApprove ? (
+                                  <Icon
+                                    icon="eos-icons:loading"
+                                    width="200"
+                                    height="75"
+                                    color="white"
+                                    className=" rounded-md"
+                                  />
+                                ) : (
+                                  "موافقة"
+                                )}
+                              </Button>
+                            }
+                            className="bg-bgColor hover:bg-red-800"
+                            title="تأكيد الموافقة"
+                            description="هل أنت متأكد من الموافقة على هذا المريض؟"
+                            onConfirm={() => handleApprovePatient(patient.id)}
+                          />
+                        )}
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
 
-          {/* Pagination */}
           {!searchTerm && response?.Data && (
             <div className="mt-4">
               <CustomPagination
