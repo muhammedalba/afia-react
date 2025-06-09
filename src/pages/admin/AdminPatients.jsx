@@ -219,12 +219,12 @@ const AdminPatients = () => {
                                     className="bg-bgColor rounded-md"
                                   />
                                 ) : (
-                                  "حذف"
+                                  "الغاء الموافقة"
                                 )}
                               </Button>
                             }
                             title="تأكيد التجميد"
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className="bg-red-600 text-white block hover:bg-red-700 "
                             description="هل أنت متأكد من تجميد هذا المريض؟ لا يمكن التراجع عن هذا الإجراء."
                             onConfirm={() => handleDeletePatient(patient.id)}
                           />

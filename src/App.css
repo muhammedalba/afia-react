@@ -1,6 +1,151 @@
 * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-display:swap ;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-display: swap;
+}
+
+
+
+
+
+
+
+
+button:focus,
+.menu-toggle-close:focus {
+  outline: none !important;
+  border: none !important
+}
+
+
+
+/* header */
+.site-header {
+  position: sticky;
+  top: 0px;
+  right: 0px;
+}
+
+/*توسيط التصنيفات في هيدر */
+.ast-header-break-point .ast-below-header-bar {
+  display: grid;
+  justify-content: center;
+}
+
+/*  */
+@media (max-width: 544px) {
+
+  .ast-desktop .ast-primary-header-bar.main-header-bar,
+  .ast-header-break-point .ast-primary-header-bar.main-header-bar {
+    padding-top: 3px !important;
+    padding-bottom: 0px !important;
+  }
+/* حجم ايقونة اللينك */
+  .ast-header-break-point .ast-builder-menu-2 .menu-item.menu-item-has-children>.ast-menu-toggle {
+    top: 4px;
+  }
+
+  /* اخفاء  */
+  .woocommerce-result-count {
+    display: none
+  }
+
+}
+
+@media (max-width: 921px) {
+  .ast-header-break-point .ast-icon.icon-arrow svg {
+    width: 0.6rem;
+  }
+
+  .ast-builder-menu-2 .inline-on-mobile .menu-item.menu-item-has-children>.ast-menu-toggle {
+    left: -46px;
+  }
+}
+
+
+
+/*  تعديل مكان ايقونة السلة والمنتج*/
+.woosq-btn-icon.woosq-icon-1,
+.woosw-btn-icon.woosw-icon-8,
+.woosw-btn-icon.woosw-icon-5 {
+  font-size: 30px;
+  padding: 10px;
+  position: absolute;
+  top: -6px;
+  right: -5px;
+}
+
+.woosq-btn-icon.woosq-icon-1 {
+  top: 1.8rem;
+}
+
+/* تعديل قاىمة جانبية لصفحه المنتج  */
+
+@media (max-width: 921px) {
+  .ast-left-sidebar #content>.ast-container {
+    flex-direction: column !important;
+
+    .wp-block-woocommerce-filter-wrapper {
+      display: none
     }
+
+    #block-135 {
+      display: none !important
+    }
+  }
+
+}
+
+/*  تعديل حجم زر فلتر الفرز حسب السعر*/
+.wc-block-components-price-slider--is-input-inline .wc-block-components-price-slider__controls .wc-block-components-price-slider__amount {
+  max-width: 150px !important;
+}
+
+/* حذف العنوان من صفحه عند البحث */
+.search .ast-archive-title {
+  display: none;
+}
+
+/* توسيط صورة في قائمة منسدلة */
+.widget-logo {
+  display: flex;
+  justify-content: center;
+}
+
+/*  منع Seraphinite Accelerator من عرض الإعلان في الفوتر*/
+
+body a[href*="s-sols.com/products/wordpress/accelerator"] {
+  display: none !important;
+  visibility: hidden;
+}
+
+
+/* إخفاء جميع أرقام الصفحات */
+ul.page-numbers li:not(:has(.prev)):not(:has(.next)):not(:has(.current)) {
+  display: none;
+}
+
+/* جعل الترقيم في وسط الصفحة (اختياري) */
+ul.page-numbers {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* تنسيق الشكل  */
+.page-numbers {
+  background-color: #f4f4f4;
+  color: #000;
+  text-decoration: none;
+}
+
+.page-numbers.current {
+  background-color: #0073aa;
+  color: #fff;
+  font-weight: bold;
+}
+
+.page-numbers li {
+  border: none !important
+}
