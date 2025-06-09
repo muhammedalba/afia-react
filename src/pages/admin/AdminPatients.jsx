@@ -238,17 +238,7 @@ const AdminPatients = () => {
                                 variant="ghost"
                                 className="bg-green-600 hover:text-white text-white hover:bg-green-700 ml-4"
                               >
-                                {LoadingApprove ? (
-                                  <Icon
-                                    icon="eos-icons:loading"
-                                    width="200"
-                                    height="75"
-                                    color="white"
-                                    className=" rounded-md"
-                                  />
-                                ) : (
-                                  "موافقة"
-                                )}
+                                موافقة
                               </Button>
                             }
                             className="bg-bgColor hover:bg-red-800"

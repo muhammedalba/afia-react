@@ -3,16 +3,15 @@ import { Icon } from "@iconify/react";
 import { pageTitle } from "../../helper";
 import medLifeImg from "../../assets/medLife.png";
 import { motion, useAnimation } from "framer-motion";
-import { Link } from "lucide-react";
-
+import img from "../../assets/muhammed.jpg";
 const developers = [
   {
     name: "م. خولة محمد",
     role: " قائدة الفريق التقني",
     image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
     socialMedia: {
-      whatsapp: "tel:+4917672749594",
-      linkedin: "https://www.linkedin.com/in/muhammed-albahlee",
+      whatsapp: "",
+      linkedin: "",
     },
   },
   {
@@ -45,10 +44,10 @@ const developers = [
   {
     name: "م. محمد البهلة",
     role: "Front-End Developer",
-    image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+    image: img,
     socialMedia: {
-      whatsapp: "",
-      linkedin: "",
+      whatsapp: "tel:+4917672749594",
+      linkedin: "https://www.linkedin.com/in/muhammed-albahlee",
     },
   },
   {

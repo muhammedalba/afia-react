@@ -59,13 +59,15 @@ const AdminDoctors = () => {
     { isLoading: LoadingDelete, isSuccess: success_delete, error: errorDelete },
   ] = useDeleteResourceMutation();
 
-  const [approveDoctor, { isLoading: LoadingApprove }] =
+  const [approveDoctor, { isLoading: LoadingApprove , isSuccess:successApprove}] =
     useCreateResourceMutation();
 
   useEffect(() => {
-    if (success_delete) successNotify("تم حذف الطبيب بنجاح");
+    if (success_delete) successNotify("تم تجميد الطبيب بنجاح");
   }, [success_delete]);
-
+  useEffect(() => {
+    if (successApprove) successNotify("تم قيول الطبيب بنجاح");
+  }, [successApprove]);
   useEffect(() => {
     if (errorDelete) errorNotify(" حدثة مشكلة اثناء  حذف الطبيب");
   }, [errorDelete]);
