@@ -37,7 +37,8 @@ const AdminPatients = () => {
       ? `/Search_for_patient/${debouncedSearchTerm}`
       : `/Display_patients?page=${currentPage}`
   );
-
+  console.log(error, "error");
+  console.log(error, "response");
   const [
     deletePatient,
     { error: errorDelete, isLoading: LoadingDelete, isSuccess: successDelete },
@@ -107,7 +108,7 @@ const AdminPatients = () => {
           <div className="relative flex-1">
             <Input
               type="text"
-              placeholder="ابحث عن مريض بالاسم أو رقم الهاتف أو الرقم القومي..."
+              placeholder="ابحث عن مريض بالاسم..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 ring-1 bg-white focus-visible:ring-bgColor text-right"
@@ -134,9 +135,12 @@ const AdminPatients = () => {
         <div className="flex justify-center items-center min-h-[400px]">
           <Preloader />
         </div>
-      ) : error ? (
-        <div className="text-red-500 p-4 text-center">{error.message}</div>
-      ) : patients.length === 0 ? (
+      ) : error && error?.status != 404 ? (
+        <div className="text-red-500 p-4 text-center">
+          {error?.data?.Message}
+        </div>
+      ) : error?.data?.Message ===
+        "No patients found for the given search query." ? (
         <div className="text-center p-8 text-gray-600 text-lg">
           لا يوجد مريض بهذا الاسم
         </div>

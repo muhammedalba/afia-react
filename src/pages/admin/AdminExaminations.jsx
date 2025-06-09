@@ -68,7 +68,8 @@ const AdminExaminations = () => {
       <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة الفحوصات</h1>
-        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+     {/* search input */}
+        {/* <form onSubmit={handleSearch} className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Input
               type="text"
@@ -92,7 +93,7 @@ const AdminExaminations = () => {
               بحث
             </Button>
           )}
-        </form>
+        </form> */}
       </div>
 
       {isLoading ? (

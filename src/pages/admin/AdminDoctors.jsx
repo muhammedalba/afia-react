@@ -52,6 +52,7 @@ const AdminDoctors = () => {
       ? `/Search_for_doctor/${debouncedSearchTerm}`
       : `/Display_doctors?page=${currentPage}`
   );
+ 
 
   const [
     deleteDoctor,
@@ -118,7 +119,7 @@ const AdminDoctors = () => {
           <div className="relative flex-1">
             <Input
               type="text"
-              placeholder="ابحث عن طبيب بالاسم أو رقم الهاتف أو الرقم القومي..."
+              placeholder="ابحث عن طبيب بالاسم ..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 ring-1 bg-white focus-visible:ring-bgColor text-right"
@@ -152,9 +153,12 @@ const AdminDoctors = () => {
           <div className="flex justify-center items-center min-h-[400px]">
             <Preloader />
           </div>
-        ) : error ? (
-          <div className="text-red-500 p-4 text-center">{error.message}</div>
-        ) : doctors.length === 0 ? (
+        ) :error &&  error?.status !== 404 ? (
+          <div className="text-red-500 p-4 text-center">
+            {error?.data?.Message}
+          </div>
+        ) : error?.data?.Message ===
+          "No doctor found for the given search query." ? (
           <motion.div
             className="text-center p-8 text-gray-600 text-lg"
             initial={{ opacity: 0 }}
@@ -184,7 +188,7 @@ const AdminDoctors = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {doctors.map((doctor, index) => (
+                    {doctors?.map((doctor, index) => (
                       <motion.tr
                         key={doctor.id}
                         initial={{ opacity: 0, y: 10 }}

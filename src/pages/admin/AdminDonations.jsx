@@ -83,7 +83,8 @@ console.log(errorApprove);
       <ToastContainer />
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4 text-right">إدارة التبرعات</h1>
-        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+        {/* search input */}
+        {/* <form onSubmit={handleSearch} className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Input
               type="text"
@@ -107,7 +108,7 @@ console.log(errorApprove);
               بحث
             </Button>
           )}
-        </form>
+        </form> */}
       </div>
 
       {isLoading ? (
