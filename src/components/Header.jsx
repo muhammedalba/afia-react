@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -12,26 +12,15 @@ import {
 import logo from "../assets/AfiaLogo.png";
 import { Icon } from "@iconify/react";
 
-import { useCreateResourceMutation } from "../redux/features/api/apiSlice";
 
 const Header = () => {
-  const [createResource, { data, error, isLoading, isSuccess }] =
-    useCreateResourceMutation();
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (isSuccess && data.Status == 200) {
-      logout();
-      navigate("/login");
-    }
-  }, [data, isSuccess]);
+
   const handleLogout = async () => {
     try {
-      await createResource({
-        url: "/Logout",
-        body: "",
-        method: "POST",
-      });
+
     } catch (error) {
       console.error("Logout failed:", error);
     }
